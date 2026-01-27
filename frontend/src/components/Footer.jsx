@@ -1,0 +1,140 @@
+import React from 'react'
+import { motion } from 'framer-motion'
+import { useCursor } from '../contexts/CursorContext'
+
+const Footer = () => {
+  const { setCursorType, setCursorText } = useCursor()
+
+  const currentYear = new Date().getFullYear()
+
+  const quickLinks = [
+    { name: 'Home', href: '#hero' },
+    { name: 'About', href: '#about' },
+    { name: 'Skills', href: '#skills' },
+    { name: 'Projects', href: '#projects' },
+    { name: 'Contact', href: '#contact' }
+  ]
+
+  const socialLinks = [
+    { name: 'GitHub', url: 'https://github.com/aminakalonge', icon: '🐙' },
+    { name: 'LinkedIn', url: 'https://linkedin.com/in/aminakalonge', icon: '💼' },
+    { name: 'Twitter', url: 'https://twitter.com/aminakalonge', icon: '🐦' },
+    { name: 'Instagram', url: 'https://instagram.com/aminakalonge', icon: '📷' }
+  ]
+
+  return (  
+    <footer className="footer">
+      <div className="container">
+        <div className="footer-content">
+          {/* Brand Section */}
+          <motion.div 
+            className="footer-brand"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h3>Amina Kalonge</h3>
+            <p>Full-Stack & Mobile Developer passionate about creating amazing digital experiences.</p>
+            <div className="footer-social">
+              {socialLinks.map((social, index) => (
+                <motion.a
+                  key={index}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-link"
+                  whileHover={{ scale: 1.2, y: -2 }}
+                  whileTap={{ scale: 0.9 }}
+                  onMouseEnter={() => {
+                    setCursorType('hover')
+                    setCursorText(`${social.name} →`)
+                  }}
+                  onMouseLeave={() => {
+                    setCursorType('default')
+                    setCursorText('')
+                  }}
+                >
+                  <span className="social-icon">{social.icon}</span>
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Quick Links */}
+          <motion.div 
+            className="footer-links"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
+            <h4>Quick Links</h4>
+            <ul>
+              {quickLinks.map((link, index) => (
+                <li key={index}>
+                  <a
+                    href={link.href}
+                    onMouseEnter={() => {
+                      setCursorType('hover')
+                      setCursorText(`Go to ${link.name} →`)
+                    }}
+                    onMouseLeave={() => {
+                      setCursorType('default')
+                      setCursorText('')
+                    }}
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Contact Info */}
+          <motion.div 
+            className="footer-contact"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <h4>Get In Touch</h4>
+            <div className="contact-item">
+              <span>📧</span>
+              <a href="mailto:hello@aminakalonge.dev">hello@aminakalonge.dev</a>
+            </div>
+            <div className="contact-item">
+              <span>📱</span>
+              <a href="tel:+254712345678">+254 712 345 678</a>
+            </div>
+            <div className="contact-item">
+              <span>📍</span>
+              <span>Nairobi, Kenya</span>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Bottom Bar */}
+        <motion.div 
+          className="footer-bottom"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          viewport={{ once: true }}
+        >
+          <div className="footer-copyright">
+            <p>&copy; {currentYear} Amina Kalonge. All rights reserved.</p>
+          </div>
+          <div className="footer-made-with">
+            <p>
+              Made with <span className="heart">❤️</span> using React & Django
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </footer>
+  )
+}
+
+export default Footer

@@ -1,0 +1,167 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+    border-left: 4px solid #007cba;
+}
+
+.stat-number {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #007cba;
+    margin: 10px 0;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.dashboard-section {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.section-title {
+    border-bottom: 2px solid #007cba;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.message-item, .user-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.message-item:last-child, .user-item:last-child {
+    border-bottom: none;
+}
+
+.unread {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.badge-success { background: #d4edda; color: #155724; }
+.badge-warning { background: #fff3cd; color: #856404; }
+.badge-info { background: #d1ecf1; color: #0c5460; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>📊 Portfolio Analytics Dashboard</h1>
+    
+    <!-- Statistics Cards -->
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <div class="stat-label">Total Messages</div>
+            <div class="stat-number">{{ stats.total_messages }}</div>
+            <div class="badge {% if stats.unread_messages > 0 %}badge-warning{% else %}badge-success{% endif %}">
+                {{ stats.unread_messages }} unread
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-label">Total Users</div>
+            <div class="stat-number">{{ stats.total_users }}</div>
+            <div class="badge badge-info">
+                {{ stats.active_users }} active
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-label">Projects</div>
+            <div class="stat-number">{{ stats.total_projects }}</div>
+            <div class="badge badge-info">
+                {{ stats.recent_projects }} recent
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-label">Skills</div>
+            <div class="stat-number">{{ stats.total_skills }}</div>
+        </div>
+    </div>
+
+    <!-- Recent Messages -->
+    <div class="dashboard-section">
+        <h2 class="section-title">📨 Recent Contact Messages</h2>
+        {% for message in recent_messages %}
+        <div class="message-item {% if not message.is_read %}unread{% endif %}">
+            <div>
+                <strong>{{ message.name }}</strong> &lt;{{ message.email }}&gt;
+                <br>
+                <small>{{ message.subject }}</small>
+                <br>
+                <span class="badge {% if message.is_read %}badge-success{% else %}badge-warning{% endif %}">
+                    {% if message.is_read %}Read{% else %}Unread{% endif %}
+                </span>
+            </div>
+            <div style="text-align: right;">
+                <small>{{ message.created_at|date:"M d, Y H:i" }}</small>
+                <br>
+                <a href="{% url 'portfolio_admin:portfolio_contactmessage_change' message.id %}" class="button">View</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No recent messages.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Recent Users -->
+    <div class="dashboard-section">
+        <h2 class="section-title">👥 Recent Users</h2>
+        {% for user in recent_users %}
+        <div class="user-item">
+            <div>
+                <strong>{{ user.username }}</strong>
+                {% if user.email %}&lt;{{ user.email }}&gt;{% endif %}
+                <br>
+                <small>{{ user.first_name }} {{ user.last_name }}</small>
+            </div>
+            <div style="text-align: right;">
+                <small>Joined: {{ user.date_joined|date:"M d, Y" }}</small>
+                <br>
+                <span class="badge {% if user.is_staff %}badge-info{% else %}badge-success{% endif %}">
+                    {% if user.is_staff %}Staff{% else %}User{% endif %}
+                </span>
+            </div>
+        </div>
+        {% empty %}
+        <p>No users found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

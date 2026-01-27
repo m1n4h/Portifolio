@@ -1,0 +1,112 @@
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-primary);
+  
+  .hero-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-subtitle {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-weight: 600;
+    }
+    
+    .hero-description {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+  
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    
+    .floating-shape {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--gradient);
+      opacity: 0.1;
+      animation: float 6s ease-in-out infinite;
+      
+      &.shape-1 {
+        width: 300px;
+        height: 300px;
+        top: 10%;
+        left: 10%;
+        animation-delay: 0s;
+      }
+      
+      &.shape-2 {
+        width: 200px;
+        height: 200px;
+        top: 60%;
+        right: 10%;
+        animation-delay: 2s;
+      }
+      
+      &.shape-3 {
+        width: 150px;
+        height: 150px;
+        bottom: 20%;
+        left: 20%;
+        animation-delay: 4s;
+      }
+    }
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .hero {
+    .hero-content {
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+        
+        .btn-primary, .btn-secondary {
+          width: 200px;
+        }
+      }
+    }
+  }
+}
