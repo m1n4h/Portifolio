@@ -10,18 +10,19 @@
     
     .filter-btn {
       padding: 0.75rem 1.5rem;
-      border: 2px solid var(--border);
+      border: 2px solid rgb(87, 83, 73);
       background: transparent;
       color: var(--text-secondary);
-      border-radius: 2rem;
+      border-radius: 3rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.5s ease;
       font-weight: 500;
       
       &:hover {
-        border-color: var(--accent);
+         border-color: var(--accent);
         color: var(--accent);
         transform: translateY(-2px);
+        background-color: rgb(84, 76, 59);
       }
       
       &.active {
@@ -36,10 +37,10 @@
   
   .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
     
-    @media (max-width: 768px) {
+    @media (max-width: 468px) {
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }

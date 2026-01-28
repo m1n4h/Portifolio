@@ -43,31 +43,73 @@ const About = () => {
           </motion.h2>
           <motion.div variants={itemVariants} className="about-text">
             <p>
-              I'm a passionate Full-Stack and Mobile Developer with expertise in creating 
-              modern, responsive web and mobile applications. With a strong foundation in 
-              both frontend and backend technologies, I bring ideas to life through clean, 
+              I'm a passionate Full-Stack and Mobile Developer with expertise in creating
+              modern, responsive web and mobile applications. With a strong foundation in
+              both frontend and backend technologies, I bring ideas to life through clean,
               efficient code and intuitive user experiences.
             </p>
             <p>
-              My journey in software development started with a curiosity about how things 
-              work, and it has evolved into a passion for building solutions that make a 
-              difference. I enjoy working with cutting-edge technologies and am always 
+              My journey in software development started with a curiosity about how things
+              work, and it has evolved into a passion for building solutions that make a
+              difference. I enjoy working with cutting-edge technologies and am always
               eager to learn and adapt to new challenges.
             </p>
           </motion.div>
           <motion.div variants={itemVariants} className="about-stats">
-            <div className="stat">
-              <h3>50+</h3>
-              <p>Projects Completed</p>
-            </div>
-            <div className="stat">
-              <h3>3+</h3>
-              <p>Years Experience</p>
-            </div>
-            <div className="stat">
-              <h3>30+</h3>
+            <motion.button
+              className="btn-primary"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onMouseEnter={() => {
+                setCursorType('hover')
+                setCursorText('View Work →')
+              }}
+              onMouseLeave={() => {
+                setCursorType('default')
+                setCursorText('')
+              }}
+              onClick={() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })}
+            >
+              project completed
+            </motion.button>
+
+
+            <motion.button
+              className="btn-primary"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onMouseEnter={() => {
+                setCursorType('hover')
+                setCursorText('View Work →')
+              }}
+              onMouseLeave={() => {
+                setCursorType('default')
+                setCursorText('')
+              }}
+              onClick={() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })}
+            >
+              years of experience
+            </motion.button>
+
+            {/* <div className="stat">
               <p>Happy Clients</p>
-            </div>
+            </div> */}
+            <motion.button
+              className="btn-primary"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onMouseEnter={() => {
+                setCursorType('hover')
+                setCursorText('View Work →')
+              }}
+              onMouseLeave={() => {
+                setCursorType('default')
+                setCursorText('')
+              }}
+              onClick={() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })}
+            >
+              Happy Clients
+            </motion.button>
           </motion.div>
         </motion.div>
       </div>

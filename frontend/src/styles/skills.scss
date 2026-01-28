@@ -6,22 +6,24 @@
     justify-content: center;
     gap: 1rem;
     margin-bottom: 3rem;
+    font-size: large;
     flex-wrap: wrap;
     
     .filter-btn {
       padding: 0.75rem 1.5rem;
-      border: 2px solid var(--border);
+      border: 2px solid rgb(87, 83, 73);
       background: transparent;
       color: var(--text-secondary);
-      border-radius: 2rem;
+      border-radius: 3rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.5s ease;
       font-weight: 500;
       
       &:hover {
         border-color: var(--accent);
         color: var(--accent);
         transform: translateY(-2px);
+        background-color: rgb(84, 76, 59);
       }
       
       &.active {
@@ -39,7 +41,7 @@
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
     
-    @media (max-width: 768px) {
+    @media (max-width: 989px) {
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
@@ -48,7 +50,7 @@
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 1rem;
-      padding: 2rem;
+      padding: 1.5rem;
       text-align: center;
       transition: all 0.3s ease;
       position: relative;
