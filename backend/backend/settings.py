@@ -86,8 +86,8 @@ if os.environ.get('DB_ENGINE') == 'postgres':
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.environ.get('POSTGRES_DB', 'portfolio_db'),
-            'USER': os.environ.get('POSTGRES_USER', 'portfolio_user'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'portfolio_pass'),
+            'USER': os.environ.get('POSTGRES_USER', 'postgres'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'amygirly'),
             'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
             'PORT': os.environ.get('POSTGRES_PORT', '5432'),
         }
