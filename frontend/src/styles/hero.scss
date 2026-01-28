@@ -17,7 +17,7 @@
       margin-bottom: 1rem;
       background: var(--gradient);
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    
       background-clip: text;
     }
     
@@ -38,7 +38,7 @@
     
     .hero-buttons {
       display: flex;
-      gap: 1rem;
+      gap: 2.5rem;
       justify-content: center;
       flex-wrap: wrap;
     }

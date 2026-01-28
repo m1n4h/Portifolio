@@ -63,7 +63,7 @@ const Hero = () => {
             View My Work
           </motion.button>
           <motion.button 
-            className="btn-secondary"
+            className="btn-primary"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onMouseEnter={() => {
