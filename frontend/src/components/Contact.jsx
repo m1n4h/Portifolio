@@ -53,7 +53,7 @@ const Contact = () => {
     {
       icon: '📍',
       title: 'Location',
-      value: 'Nairobi, Kenya',
+      value: 'Dar es salaam, Tanzania',
       description: 'Available for remote work worldwide'
     },
     {
@@ -62,12 +62,12 @@ const Contact = () => {
       value: 'hello@aminakalonge.dev',
       description: 'Send me a message anytime'
     },
-    {
-      icon: '📱',
-      title: 'Phone',
-      value: '+254 712 345 678',
-      description: 'Mon - Fri, 9am - 6pm'
-    }
+    // {
+    //   icon: '📱',
+    //   title: 'Phone',
+    //   value: '+254 712 345 678',
+    //   description: 'Mon - Fri, 9am - 6pm'
+    // }
   ]
 
   const socialLinks = [
