@@ -56,12 +56,12 @@ const Contact = () => {
       value: 'Dar es salaam, Tanzania',
       description: 'Available for remote work worldwide'
     },
-    {
-      icon: '📧',
-      title: 'Email',
-      value: 'hello@aminakalonge.dev',
-      description: 'Send me a message anytime'
-    },
+    // {
+    //   icon: '📧',
+    //   title: 'Email',
+    //   value: 'hello@aminakalonge.dev',
+    //   description: 'Send me a message anytime'
+    // },
     // {
     //   icon: '📱',
     //   title: 'Phone',

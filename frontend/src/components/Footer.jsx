@@ -27,7 +27,7 @@ const Footer = () => {
       <div className="container">
         <div className="footer-content">
           {/* Brand Section */}
-          <motion.div 
+          {/* <motion.div 
             className="footer-brand"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -59,7 +59,7 @@ const Footer = () => {
                 </motion.a>
               ))}
             </div>
-          </motion.div>
+          </motion.div> */}
 
           {/* Quick Links */}
           <motion.div 
@@ -102,15 +102,15 @@ const Footer = () => {
             <h4>Get In Touch</h4>
             <div className="contact-item">
               <span>📧</span>
-              <a href="mailto:hello@aminakalonge.dev">hello@aminakalonge.dev</a>
+              <a href="aminakalonge1@gmail.com">aminakalonge@gmail.com</a>
             </div>
             <div className="contact-item">
               <span>📱</span>
-              <a href="tel:+254712345678">+254 712 345 678</a>
+              <a href="tel:+254712345678">+255769526640</a>
             </div>
             <div className="contact-item">
               <span>📍</span>
-              <span>Nairobi, Kenya</span>
+              <span>Dar es salaam, Tanzania</span>
             </div>
           </motion.div>
         </div>
@@ -126,11 +126,11 @@ const Footer = () => {
           <div className="footer-copyright">
             <p>&copy; {currentYear} Amina Kalonge. All rights reserved.</p>
           </div>
-          <div className="footer-made-with">
+          {/* <div className="footer-made-with">
             <p>
               Made with <span className="heart">❤️</span> using React & Django
             </p>
-          </div>
+          </div> */}
         </motion.div>
       </div>
     </footer>
