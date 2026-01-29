@@ -71,10 +71,10 @@ const Contact = () => {
   ]
 
   const socialLinks = [
-    { name: 'GitHub', url: 'https://github.com/aminakalonge', icon: '🐙' },
+    { name: 'GitHub', url: 'https://github.com/m1n4h', icon: '🐙' },
     { name: 'LinkedIn', url: 'https://linkedin.com/in/aminakalonge', icon: '💼' },
     { name: 'Twitter', url: 'https://twitter.com/aminakalonge', icon: '🐦' },
-    { name: 'Instagram', url: 'https://instagram.com/aminakalonge', icon: '📷' }
+    { name: 'Instagram', url: 'https://aminakalonge1@gmail.com/aminakalonge', icon: '📷' }
   ]
 
   const containerVariants = {
