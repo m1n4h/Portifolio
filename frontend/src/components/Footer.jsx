@@ -26,42 +26,6 @@ const Footer = () => {
     <footer className="footer">
       <div className="container">
         <div className="footer-content">
-          {/* Brand Section */}
-          {/* <motion.div 
-            className="footer-brand"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h3>Amina Kalonge</h3>
-            <p>Full-Stack & Mobile Developer passionate about creating amazing digital experiences.</p>
-            <div className="footer-social">
-              {socialLinks.map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-link"
-                  whileHover={{ scale: 1.2, y: -2 }}
-                  whileTap={{ scale: 0.9 }}
-                  onMouseEnter={() => {
-                    setCursorType('hover')
-                    setCursorText(`${social.name} →`)
-                  }}
-                  onMouseLeave={() => {
-                    setCursorType('default')
-                    setCursorText('')
-                  }}
-                >
-                  <span className="social-icon">{social.icon}</span>
-                </motion.a>
-              ))}
-            </div>
-          </motion.div> */}
-
-          {/* Quick Links */}
           <motion.div 
             className="footer-links"
             initial={{ opacity: 0, y: 30 }}

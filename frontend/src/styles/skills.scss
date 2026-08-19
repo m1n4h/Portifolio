@@ -1,12 +1,26 @@
 .skills {
   background: var(--bg-primary);
+  padding: 80px 0;
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
   
   .skills-filter {
     display: flex;
     justify-content: center;
     gap: 1rem;
     margin-bottom: 3rem;
-    font-size: large;
     flex-wrap: wrap;
     
     .filter-btn {
@@ -23,7 +37,7 @@
         border-color: var(--accent);
         color: var(--accent);
         transform: translateY(-2px);
-        background-color: rgb(84, 76, 59);
+        background-color: rgba(99, 102, 241, 0.1);
       }
       
       &.active {
@@ -40,8 +54,14 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
+    margin-bottom: 2rem;
     
-    @media (max-width: 989px) {
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    
+    @media (max-width: 480px) {
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
@@ -76,13 +96,38 @@
         margin-bottom: 1rem;
         display: flex;
         justify-content: center;
+        align-items: center;
+        height: 80px;
+        
+        .skill-image {
+          width: 60px;
+          height: 60px;
+          object-fit: contain;
+          border-radius: 12px;
+          transition: transform 0.3s ease;
+          
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+        
+        span {
+          font-size: 3rem;
+        }
       }
       
       .skill-name {
         font-size: 1.25rem;
         font-weight: 600;
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.5rem;
         color: var(--text-primary);
+      }
+      
+      .skill-description {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+        line-height: 1.5;
       }
       
       .skill-progress {
@@ -121,14 +166,37 @@
     }
   }
   
+  .see-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    
+    .see-more-btn {
+      padding: 0.75rem 2rem;
+      background: transparent;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      border-radius: 3rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: var(--gradient);
+        color: white;
+        border-color: transparent;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px var(--shadow);
+      }
+    }
+  }
+  
   .no-skills {
     text-align: center;
     padding: 3rem;
     color: var(--text-tertiary);
-    
-    p {
-      margin-bottom: 1rem;
-    }
+    grid-column: 1 / -1;
   }
 }
 

@@ -6,6 +6,8 @@ import axios from 'axios'
 
 const Skills = () => {
   const [skills, setSkills] = useState([])
+  const [displayedSkills, setDisplayedSkills] = useState([])
+  const [showAll, setShowAll] = useState(false)
   const [activeCategory, setActiveCategory] = useState('all')
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, threshold: 0.3 })
@@ -13,8 +15,9 @@ const Skills = () => {
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const response = await axios.get('/api/skills/')
+        const response = await axios.get('http://localhost:8000/api/skills/')
         setSkills(response.data)
+        setDisplayedSkills(response.data.slice(0, 3))
       } catch (error) {
         console.error('Error fetching skills:', error)
       }
@@ -22,10 +25,27 @@ const Skills = () => {
     fetchSkills()
   }, [])
 
-  const categories = ['all', 'frontend', 'backend', 'mobile', 'database', 'tools']
+  const categories = ['all', 'frontend', 'backend', 'mobile', 'database', 'tools', 'design', 'devops']
+  
   const filteredSkills = activeCategory === 'all' 
     ? skills 
     : skills.filter(skill => skill.category === activeCategory)
+
+  const handleShowMore = () => {
+    setShowAll(!showAll)
+    if (!showAll) {
+      setDisplayedSkills(filteredSkills)
+    } else {
+      setDisplayedSkills(filteredSkills.slice(0, 3))
+    }
+  }
+
+  const handleCategoryFilter = (category) => {
+    setActiveCategory(category)
+    setShowAll(false)
+    const filtered = category === 'all' ? skills : skills.filter(skill => skill.category === category)
+    setDisplayedSkills(filtered.slice(0, 3))
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -72,7 +92,7 @@ const Skills = () => {
             <button
               key={category}
               className={`filter-btn ${activeCategory === category ? 'active' : ''}`}
-              onClick={() => setActiveCategory(category)}
+              onClick={() => handleCategoryFilter(category)}
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
             </button>
@@ -86,29 +106,65 @@ const Skills = () => {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          {filteredSkills.map(skill => (
-            <motion.div
-              key={skill.id}
-              className="skill-card"
-              variants={itemVariants}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="skill-icon">
-                {/* You can add icons here based on skill.name */}
-                <span>💻</span>
-              </div>
-              <h3 className="skill-name">{skill.name}</h3>
-              <div className="skill-progress">
-                <div 
-                  className="skill-progress-bar"
-                  style={{ width: `${skill.proficiency}%` }}
-                ></div>
-              </div>
-              <span className="skill-percentage">{skill.proficiency}%</span>
-            </motion.div>
-          ))}
+          {displayedSkills.length > 0 ? (
+            displayedSkills.map(skill => (
+              <motion.div
+                key={skill.id}
+                className="skill-card"
+                variants={itemVariants}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <div className="skill-icon">
+                  {skill.image_url ? (
+                    <img 
+                      src={skill.image_url} 
+                      alt={skill.name} 
+                      className="skill-image"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.style.display = 'none';
+                        e.target.parentElement.innerHTML = `<span>💻</span>`;
+                      }}
+                    />
+                  ) : (
+                    <span>{skill.icon || '💻'}</span>
+                  )}
+                </div>
+                <h3 className="skill-name">{skill.name}</h3>
+                <div className="skill-progress">
+                  <div 
+                    className="skill-progress-bar"
+                    style={{ width: `${skill.proficiency}%` }}
+                  ></div>
+                </div>
+                <span className="skill-percentage">{skill.proficiency}%</span>
+                {skill.description && (
+                  <p className="skill-description">{skill.description}</p>
+                )}
+              </motion.div>
+            ))
+          ) : (
+            <p className="no-skills">No skills found in this category.</p>
+          )}
         </motion.div>
+
+        {/* See More Button */}
+        {filteredSkills.length > 3 && (
+          <motion.div 
+            className="see-more-container"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            <button 
+              className="see-more-btn"
+              onClick={handleShowMore}
+            >
+              {showAll ? 'Show Less' : `See More (${filteredSkills.length - 3} more)`}
+            </button>
+          </motion.div>
+        )}
       </div>
     </section>
   )
