@@ -17,7 +17,11 @@ const Skills = () => {
   useEffect(() => {
     const fetchSkills = async () => {
       try {
+<<<<<<< HEAD
         const response = await axios.get(`${API_URL}skills/`)
+=======
+        const response = await axios.get('http://localhost:8000/api/skills/')
+>>>>>>> origin/main
         setSkills(response.data)
         setDisplayedSkills(response.data.slice(0, 3))
       } catch (error) {
@@ -126,9 +130,13 @@ const Skills = () => {
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.style.display = 'none';
+<<<<<<< HEAD
                         const fallback = document.createElement('span');
                         fallback.textContent = skill.icon || '💻';
                         e.target.parentElement.appendChild(fallback);
+=======
+                        e.target.parentElement.innerHTML = `<span>💻</span>`;
+>>>>>>> origin/main
                       }}
                     />
                   ) : (

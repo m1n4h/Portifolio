@@ -22,7 +22,10 @@ import ProjectsManagement from './admin/pages/Projects';
 import MessagesManagement from './admin/pages/Messages';
 import Analytics from './admin/pages/Analytics';
 import Activities from './admin/pages/Activities';
+<<<<<<< HEAD
 import Settings from './admin/pages/Settings';
+=======
+>>>>>>> origin/main
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -79,7 +82,10 @@ function App() {
           <Route path="messages" element={<MessagesManagement />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="activities" element={<Activities />} />
+<<<<<<< HEAD
           <Route path="settings" element={<Settings />} />
+=======
+>>>>>>> origin/main
         </Route>
 
         {/* Catch all - redirect to home */}

@@ -2,7 +2,10 @@ from rest_framework import viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+<<<<<<< HEAD
 from rest_framework.authtoken.models import Token
+=======
+>>>>>>> origin/main
 from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models import Count, Q
@@ -14,10 +17,20 @@ from .serializers import (
     UserActivitySerializer, EmailLogSerializer, SystemLogSerializer,
     AdminDashboardSerializer
 )
+<<<<<<< HEAD
+=======
+# Add these imports at the top
+>>>>>>> origin/main
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+<<<<<<< HEAD
+=======
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils.crypto import get_random_string
+>>>>>>> origin/main
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
@@ -382,11 +395,19 @@ class AuthViewSet(viewsets.ViewSet):
                 page='admin login'
             )
             
+<<<<<<< HEAD
             # Get or create token
             token, created = Token.objects.get_or_create(user=user)
             
             return Response({
                 'token': token.key,
+=======
+            # Generate token (you can use JWT here)
+            token = get_random_string(40)
+            
+            return Response({
+                'token': token,
+>>>>>>> origin/main
                 'user_id': user.id,
                 'username': user.username,
                 'email': user.email,
@@ -512,8 +533,11 @@ class AuthViewSet(viewsets.ViewSet):
                 ip_address=self.get_client_ip(request),
                 user_agent=request.META.get('HTTP_USER_AGENT', '')
             )
+<<<<<<< HEAD
             # Delete token
             Token.objects.filter(user=request.user).delete()
+=======
+>>>>>>> origin/main
         
         logout(request)
         return Response({'message': 'Logged out successfully'})

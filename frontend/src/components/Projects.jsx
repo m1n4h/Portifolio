@@ -19,7 +19,11 @@ const Projects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
+<<<<<<< HEAD
         const response = await axios.get(`${API_URL}projects/`)
+=======
+        const response = await axios.get('http://localhost:8000/api/projects/')
+>>>>>>> origin/main
         setProjects(response.data)
         setDisplayedProjects(response.data.slice(0, 3))
       } catch (error) {
@@ -138,14 +142,22 @@ const Projects = () => {
                         e.target.style.display = 'none';
                         e.target.parentElement.innerHTML = `
                           <div class="project-placeholder">
+<<<<<<< HEAD
                             <span></span>
+=======
+                            <span>🚀</span>
+>>>>>>> origin/main
                           </div>
                         `;
                       }}
                     />
                   ) : (
                     <div className="project-placeholder">
+<<<<<<< HEAD
                       <span></span>
+=======
+                      <span>🚀</span>
+>>>>>>> origin/main
                     </div>
                   )}
                   <div className="project-overlay">

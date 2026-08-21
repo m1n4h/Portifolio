@@ -25,9 +25,13 @@ const Footer = () => {
   return (  
     <footer className="footer">
       <div className="container">
+<<<<<<< HEAD
         <div className="footer-grid">
           {/* Brand Section */}
          
+=======
+        <div className="footer-content">
+>>>>>>> origin/main
           <motion.div 
             className="footer-links"
             initial={{ opacity: 0, y: 30 }}

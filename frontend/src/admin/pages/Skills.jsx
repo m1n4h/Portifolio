@@ -1,3 +1,158 @@
+<<<<<<< HEAD
+=======
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import './Skills.css';
+
+// const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/';
+
+// const Skills = () => {
+//   const [skills, setSkills] = useState([]);
+//   const [editingSkill, setEditingSkill] = useState(null);
+//   const [formData, setFormData] = useState({
+//     name: '',
+//     category: 'frontend',
+//     proficiency: 80,
+//     icon: '',
+//     description: '',
+//   });
+//   const [loading, setLoading] = useState(false);
+//   const token = localStorage.getItem('access_token');
+
+//   useEffect(() => {
+//     fetchSkills();
+//   }, []);
+
+//   const fetchSkills = async () => {
+//     setLoading(true);
+//     try {
+//       const response = await axios.get(`${API_URL}skills/`, {
+//         headers: { Authorization: `Bearer ${token}` }
+//       });
+//       setSkills(response.data);
+//     } catch (error) {
+//       console.error('Error fetching skills:', error);
+//     }
+//     setLoading(false);
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       if (editingSkill) {
+//         await axios.put(`${API_URL}skills/${editingSkill.id}/`, formData, {
+//           headers: { Authorization: `Bearer ${token}` }
+//         });
+//       } else {
+//         await axios.post(`${API_URL}skills/`, formData, {
+//           headers: { Authorization: `Bearer ${token}` }
+//         });
+//       }
+//       setFormData({ name: '', category: 'frontend', proficiency: 80, icon: '', description: '' });
+//       setEditingSkill(null);
+//       fetchSkills();
+//     } catch (error) {
+//       console.error('Error saving skill:', error);
+//     }
+//   };
+
+//   const handleDelete = async (id) => {
+//     if (window.confirm('Are you sure you want to delete this skill?')) {
+//       try {
+//         await axios.delete(`${API_URL}skills/${id}/`, {
+//           headers: { Authorization: `Bearer ${token}` }
+//         });
+//         fetchSkills();
+//       } catch (error) {
+//         console.error('Error deleting skill:', error);
+//       }
+//     }
+//   };
+
+//   return (
+//     <div className="skills-management">
+//       <h1>Manage Skills</h1>
+//       <form onSubmit={handleSubmit} className="skill-form">
+//         <input
+//           type="text"
+//           placeholder="Skill Name"
+//           value={formData.name}
+//           onChange={(e) => setFormData({...formData, name: e.target.value})}
+//           required
+//         />
+//         <select
+//           value={formData.category}
+//           onChange={(e) => setFormData({...formData, category: e.target.value})}
+//         >
+//           <option value="frontend">Frontend</option>
+//           <option value="backend">Backend</option>
+//           <option value="database">Database</option>
+//           <option value="tools">Tools</option>
+//           <option value="design">Design</option>
+//           <option value="devops">DevOps</option>
+//         </select>
+//         <input
+//           type="number"
+//           placeholder="Proficiency (1-100)"
+//           value={formData.proficiency}
+//           onChange={(e) => setFormData({...formData, proficiency: parseInt(e.target.value)})}
+//           min="1"
+//           max="100"
+//           required
+//         />
+//         <input
+//           type="text"
+//           placeholder="Icon"
+//           value={formData.icon}
+//           onChange={(e) => setFormData({...formData, icon: e.target.value})}
+//         />
+//         <textarea
+//           placeholder="Description"
+//           value={formData.description}
+//           onChange={(e) => setFormData({...formData, description: e.target.value})}
+//         />
+//         <button type="submit">
+//           {editingSkill ? 'Update Skill' : 'Add Skill'}
+//         </button>
+//       </form>
+
+//       <div className="skills-list">
+//         {loading ? (
+//           <p>Loading...</p>
+//         ) : (
+//           skills.map((skill) => (
+//             <div key={skill.id} className="skill-item">
+//               <div className="skill-info">
+//                 <h3>{skill.icon && <span>{skill.icon}</span>} {skill.name}</h3>
+//                 <p>Category: {skill.category}</p>
+//                 <p>Proficiency: {skill.proficiency}%</p>
+//                 <div className="progress-bar">
+//                   <div style={{ width: `${skill.proficiency}%` }}></div>
+//                 </div>
+//               </div>
+//               <div className="skill-actions">
+//                 <button onClick={() => {
+//                   setEditingSkill(skill);
+//                   setFormData({
+//                     name: skill.name,
+//                     category: skill.category,
+//                     proficiency: skill.proficiency,
+//                     icon: skill.icon || '',
+//                     description: skill.description || '',
+//                   });
+//                 }}>✏️ Edit</button>
+//                 <button onClick={() => handleDelete(skill.id)}>🗑️ Delete</button>
+//               </div>
+//             </div>
+//           ))
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Skills;
+>>>>>>> origin/main
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Skills.css';

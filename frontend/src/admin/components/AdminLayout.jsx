@@ -21,6 +21,7 @@ const AdminLayout = () => {
     if (userData) {
       setUser(JSON.parse(userData));
     }
+<<<<<<< HEAD
 
     // Listen for storage changes (e.g., avatar updated in Settings)
     const handleStorageChange = (e) => {
@@ -34,6 +35,8 @@ const AdminLayout = () => {
     window.addEventListener('storage', handleStorageChange);
 
     return () => window.removeEventListener('storage', handleStorageChange);
+=======
+>>>>>>> origin/main
   }, [navigate]);
 
   const handleLogout = () => {
@@ -66,6 +69,7 @@ const AdminLayout = () => {
 
         <nav className="sidebar-nav">
           <Link to="/admin/dashboard" className={isActive('/admin/dashboard')}>
+<<<<<<< HEAD
             <span className="nav-icon"></span>
             {isSidebarOpen && <span>Dashboard</span>}
           </Link>
@@ -93,11 +97,37 @@ const AdminLayout = () => {
             <span className="nav-icon"></span>
             {isSidebarOpen && <span>Settings</span>}
           </Link>
+=======
+            <span className="nav-icon">📊</span>
+            {isSidebarOpen && <span>Dashboard</span>}
+          </Link>
+          <Link to="/admin/skills" className={isActive('/admin/skills')}>
+            <span className="nav-icon">💻</span>
+            {isSidebarOpen && <span>Skills</span>}
+          </Link>
+          <Link to="/admin/projects" className={isActive('/admin/projects')}>
+            <span className="nav-icon">📁</span>
+            {isSidebarOpen && <span>Projects</span>}
+          </Link>
+          <Link to="/admin/messages" className={isActive('/admin/messages')}>
+            <span className="nav-icon">✉️</span>
+            {isSidebarOpen && <span>Messages</span>}
+          </Link>
+          <Link to="/admin/analytics" className={isActive('/admin/analytics')}>
+            <span className="nav-icon">📈</span>
+            {isSidebarOpen && <span>Analytics</span>}
+          </Link>
+          <Link to="/admin/activities" className={isActive('/admin/activities')}>
+            <span className="nav-icon">👤</span>
+            {isSidebarOpen && <span>Activities</span>}
+          </Link>
+>>>>>>> origin/main
         </nav>
 
         <div className="sidebar-footer">
           <div className="user-info">
             <div className="user-avatar">
+<<<<<<< HEAD
               {user?.avatar_url ? (
                 <img 
                   src={user.avatar_url} 
@@ -113,6 +143,9 @@ const AdminLayout = () => {
               <span className="avatar-fallback" style={{ display: user?.avatar_url ? 'none' : 'flex' }}>
                 {user?.username?.charAt(0).toUpperCase() || 'A'}
               </span>
+=======
+              {user?.username?.charAt(0).toUpperCase() || 'A'}
+>>>>>>> origin/main
             </div>
             {isSidebarOpen && (
               <div className="user-details">
@@ -122,7 +155,11 @@ const AdminLayout = () => {
             )}
           </div>
           <button onClick={handleLogout} className="logout-btn">
+<<<<<<< HEAD
             <span></span>
+=======
+            <span>🚪</span>
+>>>>>>> origin/main
             {isSidebarOpen && <span>Logout</span>}
           </button>
         </div>

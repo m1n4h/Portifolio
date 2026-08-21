@@ -71,7 +71,10 @@ class Skill(models.Model):
     category = models.CharField(max_length=20, choices=SKILL_CATEGORIES)
     proficiency = models.IntegerField(default=80)  # Percentage
     icon = models.CharField(max_length=100, blank=True)
+<<<<<<< HEAD
     image_url = models.URLField(blank=True, null=True)
+=======
+>>>>>>> origin/main
     description = models.TextField(blank=True, null=True)
     order = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
