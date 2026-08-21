@@ -5,8 +5,12 @@ import { useRef } from 'react'
 import axios from 'axios'
 import { useCursor } from '../contexts/CursorContext'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/'
+
 const Projects = () => {
   const [projects, setProjects] = useState([])
+  const [displayedProjects, setDisplayedProjects] = useState([])
+  const [showAll, setShowAll] = useState(false)
   const [activeFilter, setActiveFilter] = useState('all')
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, threshold: 0.3 })
@@ -15,8 +19,9 @@ const Projects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('/api/projects/')
+        const response = await axios.get(`${API_URL}projects/`)
         setProjects(response.data)
+        setDisplayedProjects(response.data.slice(0, 3))
       } catch (error) {
         console.error('Error fetching projects:', error)
       }
@@ -25,9 +30,26 @@ const Projects = () => {
   }, [])
 
   const categories = ['all', 'web', 'mobile', 'desktop']
+  
   const filteredProjects = activeFilter === 'all' 
     ? projects 
     : projects.filter(project => project.category === activeFilter)
+
+  const handleShowMore = () => {
+    setShowAll(!showAll)
+    if (!showAll) {
+      setDisplayedProjects(filteredProjects)
+    } else {
+      setDisplayedProjects(filteredProjects.slice(0, 3))
+    }
+  }
+
+  const handleFilterChange = (filter) => {
+    setActiveFilter(filter)
+    setShowAll(false)
+    const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter)
+    setDisplayedProjects(filtered.slice(0, 3))
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -83,7 +105,7 @@ const Projects = () => {
             <button
               key={category}
               className={`filter-btn ${activeFilter === category ? 'active' : ''}`}
-              onClick={() => setActiveFilter(category)}
+              onClick={() => handleFilterChange(category)}
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
             </button>
@@ -97,100 +119,128 @@ const Projects = () => {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          {filteredProjects.map(project => (
-            <motion.div
-              key={project.id}
-              className="project-card"
-              variants={itemVariants}
-              whileHover={{ y: -10 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className="project-image">
-                {project.image_url ? (
-                  <img src={project.image_url} alt={project.title} />
-                ) : (
-                  <div className="project-placeholder">
-                    <span>🚀</span>
-                  </div>
-                )}
-                <div className="project-overlay">
-                  <div className="project-links">
-                    {project.live_url && (
-                      <motion.a
-                        href={project.live_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link live"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onMouseEnter={() => {
-                          setCursorType('hover')
-                          setCursorText('View Live →')
-                        }}
-                        onMouseLeave={() => {
-                          setCursorType('default')
-                          setCursorText('')
-                        }}
-                      >
-                        Live Demo
-                      </motion.a>
-                    )}
-                    {project.github_url && (
-                      <motion.a
-                        href={project.github_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link github"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onMouseEnter={() => {
-                          setCursorType('hover')
-                          setCursorText('View Code →')
-                        }}
-                        onMouseLeave={() => {
-                          setCursorType('default')
-                          setCursorText('')
-                        }}
-                      >
-                        GitHub
-                      </motion.a>
-                    )}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="project-content">
-                <h3 className="project-title">{project.title}</h3>
-                <p className="project-description">{project.description}</p>
-                <div className="project-technologies">
-                  {project.technologies.split(',').map((tech, index) => (
-                    <span key={index} className="tech-tag">
-                      {tech.trim()}
-                    </span>
-                  ))}
-                </div>
-                <div className="project-category">
-                  <span className={`category-badge ${project.category}`}>
-                    {project.category}
-                  </span>
-                  {project.featured && (
-                    <span className="featured-badge">Featured</span>
+          {displayedProjects.length > 0 ? (
+            displayedProjects.map(project => (
+              <motion.div
+                key={project.id}
+                className="project-card"
+                variants={itemVariants}
+                whileHover={{ y: -10 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <div className="project-image">
+                  {project.image_url ? (
+                    <img 
+                      src={project.image_url} 
+                      alt={project.title}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.style.display = 'none';
+                        e.target.parentElement.innerHTML = `
+                          <div class="project-placeholder">
+                            <span></span>
+                          </div>
+                        `;
+                      }}
+                    />
+                  ) : (
+                    <div className="project-placeholder">
+                      <span></span>
+                    </div>
                   )}
+                  <div className="project-overlay">
+                    <div className="project-links">
+                      {project.live_url && (
+                        <motion.a
+                          href={project.live_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-link live"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onMouseEnter={() => {
+                            setCursorType('hover')
+                            setCursorText('View Live →')
+                          }}
+                          onMouseLeave={() => {
+                            setCursorType('default')
+                            setCursorText('')
+                          }}
+                        >
+                          Live Demo
+                        </motion.a>
+                      )}
+                      {project.github_url && (
+                        <motion.a
+                          href={project.github_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="project-link github"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onMouseEnter={() => {
+                            setCursorType('hover')
+                            setCursorText('View Code →')
+                          }}
+                          onMouseLeave={() => {
+                            setCursorType('default')
+                            setCursorText('')
+                          }}
+                        >
+                          GitHub
+                        </motion.a>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
+                
+                <div className="project-content">
+                  <h3 className="project-title">{project.title}</h3>
+                  <p className="project-description">{project.description}</p>
+                  <div className="project-technologies">
+                    {project.technologies && project.technologies.split(',').map((tech, index) => (
+                      <span key={index} className="tech-tag">
+                        {tech.trim()}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="project-category">
+                    <span className={`category-badge ${project.category}`}>
+                      {project.category}
+                    </span>
+                    {project.featured && (
+                      <span className="featured-badge">Featured</span>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            <motion.div 
+              className="no-projects"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              <p>No projects found in the {activeFilter} category.</p>
             </motion.div>
-          ))}
+          )}
         </motion.div>
 
-        {filteredProjects.length === 0 && (
+        {/* See More Button */}
+        {filteredProjects.length > 3 && (
           <motion.div 
-            className="no-projects"
+            className="see-more-container"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <p>No projects found in the {activeFilter} category.</p>
-            <p>Add projects through the Django admin panel.</p>
+            <button 
+              className="see-more-btn"
+              onClick={handleShowMore}
+            >
+              {showAll ? 'Show Less' : `See More (${filteredProjects.length - 3} more)`}
+            </button>
           </motion.div>
         )}
       </div>

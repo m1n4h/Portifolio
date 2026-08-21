@@ -1,0 +1,263 @@
+/* Add these styles to existing Messages.css */
+
+.messages-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.messages-header h1 {
+  font-size: 28px;
+  color: #2d3748;
+  margin: 0;
+}
+
+.messages-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.unread-badge {
+  background: #667eea;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.action-btn.mark-read {
+  background: #ebf8ff;
+  color: #2b6cb0;
+}
+
+.action-btn.mark-read:hover {
+  background: #bee3f8;
+}
+
+.action-btn.reply {
+  background: #667eea;
+  color: white;
+}
+
+.action-btn.reply:hover {
+  background: #5a67d8;
+}
+
+.action-btn.delete {
+  background: #fff5f5;
+  color: #c53030;
+}
+
+.action-btn.delete:hover {
+  background: #fed7d7;
+}
+
+.action-btn.danger {
+  background: #fc8181;
+  color: white;
+}
+
+.action-btn.danger:hover {
+  background: #f56565;
+}
+
+.action-btn.refresh {
+  background: #f7fafc;
+  color: #4a5568;
+}
+
+.action-btn.refresh:hover {
+  background: #e2e8f0;
+}
+
+.no-messages {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.empty-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.no-messages p {
+  font-size: 18px;
+  color: #4a5568;
+  margin: 10px 0;
+}
+
+.empty-sub {
+  color: #a0aec0;
+  font-size: 14px;
+}
+
+.message-sender {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.sender-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.phone {
+  font-size: 13px;
+  color: #718096;
+  margin: 2px 0;
+}
+
+.message-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.status-badge {
+  font-size: 12px;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.status-badge.read {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.status-badge.unread {
+  background: #fefcbf;
+  color: #744210;
+}
+
+.message-reply {
+  background: #f7fafc;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  border-left: 3px solid #667eea;
+}
+
+.reply-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #4a5568;
+  margin-bottom: 8px;
+}
+
+.reply-date {
+  color: #a0aec0;
+  font-size: 12px;
+}
+
+.reply-form {
+  margin-top: 15px;
+  padding: 15px;
+  background: #f7fafc;
+  border-radius: 10px;
+}
+
+.reply-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  resize: vertical;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.reply-form textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.reply-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.send-btn {
+  padding: 10px 24px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.send-btn:hover {
+  background: #5a67d8;
+}
+
+.cancel-btn {
+  padding: 10px 24px;
+  background: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+  background: #cbd5e0;
+}
+
+@media (max-width: 768px) {
+  .messages-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .messages-actions {
+    width: 100%;
+  }
+  
+  .message-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .message-meta {
+    align-items: flex-start;
+    width: 100%;
+  }
+}

@@ -2,10 +2,12 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
+import { useCursor } from '../contexts/CursorContext'
 
 const About = () => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, threshold: 0.3 })
+  const { setCursorType, setCursorText } = useCursor()
 
   const containerVariants = {
     hidden: { opacity: 0 },

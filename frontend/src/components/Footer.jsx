@@ -25,48 +25,14 @@ const Footer = () => {
   return (  
     <footer className="footer">
       <div className="container">
-        <div className="footer-content">
+        <div className="footer-grid">
           {/* Brand Section */}
-          {/* <motion.div 
-            className="footer-brand"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h3>Amina Kalonge</h3>
-            <p>Full-Stack & Mobile Developer passionate about creating amazing digital experiences.</p>
-            <div className="footer-social">
-              {socialLinks.map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-link"
-                  whileHover={{ scale: 1.2, y: -2 }}
-                  whileTap={{ scale: 0.9 }}
-                  onMouseEnter={() => {
-                    setCursorType('hover')
-                    setCursorText(`${social.name} →`)
-                  }}
-                  onMouseLeave={() => {
-                    setCursorType('default')
-                    setCursorText('')
-                  }}
-                >
-                  <span className="social-icon">{social.icon}</span>
-                </motion.a>
-              ))}
-            </div>
-          </motion.div> */}
-
-          {/* Quick Links */}
+         
           <motion.div 
             className="footer-links"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
             <h4>Quick Links</h4>
@@ -96,17 +62,17 @@ const Footer = () => {
             className="footer-contact"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
           >
             <h4>Get In Touch</h4>
             <div className="contact-item">
               <span>📧</span>
-              <a href="aminakalonge1@gmail.com">aminakalonge@gmail.com</a>
+              <a href="mailto:aminakalonge1@gmail.com">aminakalonge1@gmail.com</a>
             </div>
             <div className="contact-item">
               <span>📱</span>
-              <a href="tel:+254712345678">+255769526640</a>
+              <a href="tel:+255769526640">+255 769 526 640</a>
             </div>
             <div className="contact-item">
               <span>📍</span>
@@ -120,17 +86,15 @@ const Footer = () => {
           className="footer-bottom"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
           viewport={{ once: true }}
         >
-          <div className="footer-copyright">
-            <p>&copy; {currentYear} Amina Kalonge. All rights reserved.</p>
-          </div>
-          {/* <div className="footer-made-with">
-            <p>
-              Made with <span className="heart">❤️</span> using React & Django
-            </p>
-          </div> */}
+          <p className="footer-copyright">
+            &copy; {currentYear} Amina Kalonge. All rights reserved.
+          </p>
+          <p className="footer-made-with">
+            Made with <span className="heart"></span> using React & Django
+          </p>
         </motion.div>
       </div>
     </footer>

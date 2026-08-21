@@ -4,7 +4,6 @@ import { useTheme } from '../contexts/ThemeContext'
 import { useCursor } from '../contexts/CursorContext'
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { isDark, toggleTheme } = useTheme()
   const { setCursorType, setCursorText } = useCursor()
@@ -28,11 +27,12 @@ const Header = () => {
   return (
     <motion.header
       className={`header ${scrolled ? 'scrolled' : ''}`}
+      data-theme={isDark ? 'dark' : 'light'}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <nav className="nav container">
+      <div className="header-container">
         <div className="logo">
           <motion.h3
             whileHover={{ scale: 1.05 }}
@@ -42,12 +42,12 @@ const Header = () => {
           </motion.h3>
         </div>
 
-        <div className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
+        {/* Navigation Links - Desktop */}
+        <div className="nav-menu">
           {navItems.map((item) => (
             <a
               key={item.name}
               href={item.href}
-              onClick={() => setIsMenuOpen(false)}
               onMouseEnter={() => {
                 setCursorType('hover')
                 setCursorText(`Go to ${item.name}`)
@@ -79,19 +79,8 @@ const Header = () => {
           >
             {isDark ? '☀️' : '🌙'}
           </motion.button>
-
-          <button
-            className={`menu-toggle ${isMenuOpen ? 'active' : ''}`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            onMouseEnter={() => setCursorType('hover')}
-            onMouseLeave={() => setCursorType('default')}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
         </div>
-      </nav>
+      </div>
     </motion.header>
   )
 }

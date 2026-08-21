@@ -15,6 +15,7 @@ const Contact = () => {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState('')
+  const [submitMessage, setSubmitMessage] = useState('')
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, threshold: 0.3 })
   const { setCursorType, setCursorText } = useCursor()
@@ -30,10 +31,21 @@ const Contact = () => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus('')
+    setSubmitMessage('')
 
     try {
-      await axios.post('/api/contact/', formData)
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/'
+      
+      const response = await axios.post(`${API_URL}contact/`, formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      console.log('Message sent successfully:', response.data)
+      
       setSubmitStatus('success')
+      setSubmitMessage('✅ Message sent successfully! I\'ll get back to you soon.')
       setFormData({
         name: '',
         email: '',
@@ -42,8 +54,18 @@ const Contact = () => {
         message: ''
       })
     } catch (error) {
-      setSubmitStatus('error')
       console.error('Error submitting form:', error)
+      
+      if (error.response) {
+        setSubmitStatus('error')
+        setSubmitMessage(error.response.data.error || '❌ Failed to send message. Please try again.')
+      } else if (error.request) {
+        setSubmitStatus('error')
+        setSubmitMessage('❌ Unable to connect to server. Please check your connection.')
+      } else {
+        setSubmitStatus('error')
+        setSubmitMessage('❌ An error occurred. Please try again.')
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -56,25 +78,13 @@ const Contact = () => {
       value: 'Dar es salaam, Tanzania',
       description: 'Available for remote work worldwide'
     },
-    // {
-    //   icon: '📧',
-    //   title: 'Email',
-    //   value: 'hello@aminakalonge.dev',
-    //   description: 'Send me a message anytime'
-    // },
-    // {
-    //   icon: '📱',
-    //   title: 'Phone',
-    //   value: '+254 712 345 678',
-    //   description: 'Mon - Fri, 9am - 6pm'
-    // }
   ]
 
   const socialLinks = [
     { name: 'GitHub', url: 'https://github.com/m1n4h', icon: '🐙' },
     { name: 'LinkedIn', url: 'https://linkedin.com/in/aminakalonge', icon: '💼' },
     { name: 'Twitter', url: 'https://twitter.com/aminakalonge', icon: '🐦' },
-    { name: 'Instagram', url: 'https://aminakalonge1@gmail.com/aminakalonge', icon: '📷' }
+    { name: 'Instagram', url: 'https://instagram.com/aminakalonge', icon: '📷' }
   ]
 
   const containerVariants = {
@@ -192,8 +202,6 @@ const Contact = () => {
                     onChange={handleChange}
                     placeholder="Your Name"
                     required
-                    onMouseEnter={() => setCursorType('hover')}
-                    onMouseLeave={() => setCursorType('default')}
                   />
                 </div>
                 <div className="form-group">
@@ -204,8 +212,6 @@ const Contact = () => {
                     onChange={handleChange}
                     placeholder="Your Email"
                     required
-                    onMouseEnter={() => setCursorType('hover')}
-                    onMouseLeave={() => setCursorType('default')}
                   />
                 </div>
               </div>
@@ -218,8 +224,6 @@ const Contact = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Phone Number (Optional)"
-                    onMouseEnter={() => setCursorType('hover')}
-                    onMouseLeave={() => setCursorType('default')}
                   />
                 </div>
                 <div className="form-group">
@@ -230,13 +234,11 @@ const Contact = () => {
                     onChange={handleChange}
                     placeholder="Subject"
                     required
-                    onMouseEnter={() => setCursorType('hover')}
-                    onMouseLeave={() => setCursorType('default')}
                   />
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className="form-group full-width">
                 <textarea
                   name="message"
                   value={formData.message}
@@ -244,28 +246,20 @@ const Contact = () => {
                   placeholder="Your Message"
                   rows="6"
                   required
-                  onMouseEnter={() => setCursorType('hover')}
-                  onMouseLeave={() => setCursorType('default')}
                 ></textarea>
               </div>
 
-              <motion.button
-                type="submit"
-                className={`submit-btn ${isSubmitting ? 'submitting' : ''}`}
-                disabled={isSubmitting}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onMouseEnter={() => {
-                  setCursorType('hover')
-                  setCursorText('Send Message →')
-                }}
-                onMouseLeave={() => {
-                  setCursorType('default')
-                  setCursorText('')
-                }}
-              >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
-              </motion.button>
+              <div className="form-actions">
+                <motion.button
+                  type="submit"
+                  className={`submit-btn ${isSubmitting ? 'submitting' : ''}`}
+                  disabled={isSubmitting}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                </motion.button>
+              </div>
 
               {submitStatus === 'success' && (
                 <motion.div 
@@ -273,7 +267,7 @@ const Contact = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                   Message sent successfully! I'll get back to you soon.
+                  {submitMessage}
                 </motion.div>
               )}
 
@@ -283,7 +277,7 @@ const Contact = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                   Failed to send message. Please try again.
+                  {submitMessage}
                 </motion.div>
               )}
             </form>

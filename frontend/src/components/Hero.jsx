@@ -42,8 +42,9 @@ const Hero = () => {
           Full-Stack & Mobile Developer
         </motion.h2>
         <motion.p variants={itemVariants} className="hero-description">
-          Crafting digital experiences with modern technologies and 
-          innovative solutions. Passionate about clean code and user-centric design.
+          I am a passionate Software Developer with a strong focus on Mobile Application
+           development, backed by a solid foundation in Cybersecurity and Networking 
+           fundamentals. I believe that great apps aren't just functional—they're secure, efficient, and built with the user's safety in mind.
         </motion.p>
         <motion.div variants={itemVariants} className="hero-buttons">
           <motion.button 

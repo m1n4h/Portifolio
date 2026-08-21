@@ -14,5 +14,5 @@ RUN python -m venv /py && \
 
 
    
-ENV PATH="py/bin/:$PATH"
+ENV PATH="/py/bin/:$PATH"
 CMD ["/py/bin/python", "manage.py", "runserver", "0.0.0.0:8000"]
