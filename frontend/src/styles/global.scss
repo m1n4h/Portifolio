@@ -2,20 +2,26 @@
 :root {
   // Colors - Light theme (default)
   --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
+  --bg-secondary: #f0f4f8;
+  --bg-tertiary: #e8eef5;
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-tertiary: #64748b;
-  --accent: #6366f1;
-  --accent-hover: #4f46e5;
-  --accent-light: #818cf8;
+  --accent: #1a6fb5;
+  --accent-hover: #155d97;
+  --accent-light: #3d9be9;
+  --secondary: #c9a84c;
+  --secondary-hover: #b8963a;
+  --secondary-light: #e0c46e;
+  --tertiary: #2a9d8f;
+  --tertiary-hover: #238b7e;
   --border: #e2e8f0;
   --border-light: #f1f5f9;
   --shadow: rgba(0, 0, 0, 0.1);
   --shadow-lg: rgba(0, 0, 0, 0.15);
-  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient: linear-gradient(135deg, #1a6fb5 0%, #2a9d8f 100%);
+  --gradient-secondary: linear-gradient(135deg, #c9a84c 0%, #1a6fb5 100%);
+  --gradient-gold: linear-gradient(135deg, #c9a84c 0%, #e0c46e 100%);
 }
 
 [data-theme="dark"] {
@@ -29,8 +35,9 @@
   --border-light: #1e293b;
   --shadow: rgba(0, 0, 0, 0.3);
   --shadow-lg: rgba(0, 0, 0, 0.5);
-  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient: linear-gradient(135deg, #1a6fb5 0%, #2a9d8f 100%);
+  --gradient-secondary: linear-gradient(135deg, #c9a84c 0%, #1a6fb5 100%);
+  --gradient-gold: linear-gradient(135deg, #c9a84c 0%, #e0c46e 100%);
 }
 
 
@@ -340,6 +347,14 @@ a:focus-visible {
       background: var(--accent);
     }
   }
+}
+
+// Footer logo
+.footer-logo { height: 48px; width: auto; object-fit: contain; }
+.footer-logo-fallback {
+  font-size: 1.6rem; font-weight: 800;
+  background: linear-gradient(135deg, #1a6fb5, #c9a84c);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 
 // Import component styles

@@ -53,10 +53,13 @@ const AdminLayout = () => {
     { to: '/admin/dashboard', label: 'Dashboard'},
     { to: '/admin/skills', label: 'Skills' },
     { to: '/admin/projects', label: 'Projects' },
+    { to: '/admin/experience', label: 'Experience' },
+    { to: '/admin/clients', label: 'Clients' },
+    { to: '/admin/education', label: 'Education' },
     { to: '/admin/messages', label: 'Messages'},
     { to: '/admin/analytics', label: 'Analytics'},
     { to: '/admin/activities', label: 'Activities'},
-    { to: '/admin/settings', label: 'Settings', icon: '⚙' },
+    { to: '/admin/settings', label: 'Settings' },
   ];
 
   return (

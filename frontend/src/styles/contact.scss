@@ -202,6 +202,64 @@
         &.full-width {
           grid-column: 1 / -1;
         }
+
+        // Phone input with country selector
+        &.phone-group {
+          .phone-input-wrap {
+            display: flex;
+            gap: 0;
+            border: 2px solid var(--border);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            background: var(--bg-primary);
+            transition: all 0.3s ease;
+
+            &:focus-within {
+              border-color: var(--accent);
+              box-shadow: 0 0 0 3px rgba(26, 111, 181, 0.15);
+            }
+
+            .country-select {
+              flex-shrink: 0;
+              width: 130px;
+              padding: 0.9rem 0.5rem;
+              border: none;
+              border-right: 1px solid var(--border);
+              background: var(--bg-secondary);
+              color: var(--text-primary);
+              font-size: 0.85rem;
+              font-weight: 500;
+              cursor: pointer;
+              outline: none;
+            }
+
+            input {
+              flex: 1;
+              border: none !important;
+              border-radius: 0 !important;
+              box-shadow: none !important;
+              &.input-error {
+                background: rgba(239, 68, 68, 0.05);
+              }
+            }
+          }
+
+          .field-error {
+            display: block;
+            color: #dc2626;
+            font-size: 0.8rem;
+            margin-top: 0.35rem;
+            font-weight: 500;
+          }
+
+          .field-hint {
+            display: block;
+            color: var(--text-tertiary);
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+            line-height: 1.3;
+          }
+        }
       }
 
       .form-actions {

@@ -27,7 +27,20 @@ const Footer = () => {
       <div className="container">
         <div className="footer-grid">
           {/* Brand Section */}
-         
+          <motion.div
+            className="footer-brand"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <img src="/images/logo.png" alt="M1N4H" className="footer-logo" onError={(e) => { e.target.style.display = 'none'; e.target.nextElementSibling.style.display = 'block' }} />
+            <span className="footer-logo-fallback" style={{ display: 'none' }}>M1N4H</span>
+            <p style={{ marginTop: '0.8rem', color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
+              Passionate Software Developer crafting secure, beautiful digital experiences.
+            </p>
+          </motion.div>
+
           <motion.div 
             className="footer-links"
             initial={{ opacity: 0, y: 30 }}

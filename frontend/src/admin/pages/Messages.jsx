@@ -10,9 +10,11 @@ const Messages = () => {
   const [loading, setLoading] = useState(true);
   const [replyData, setReplyData] = useState({
     id: null,
-    reply: ''
+    reply: '',
+    via: 'both'
   });
   const [showReply, setShowReply] = useState(false);
+  const [replyStatus, setReplyStatus] = useState('');
   const [selectedMessage, setSelectedMessage] = useState(null);
   const token = localStorage.getItem('access_token');
 
@@ -67,17 +69,20 @@ const Messages = () => {
     }
 
     try {
-      await axios.post(`${API_URL}contact/${id}/reply/`, {
-        reply: replyData.reply
+      const res = await axios.post(`${API_URL}contact/${id}/reply/`, {
+        reply: replyData.reply,
+        via: replyData.via
       }, {
         headers: { Authorization: `Token ${token}` }
       });
-      setReplyData({ id: null, reply: '' });
+      setReplyStatus(`Reply sent! ${JSON.stringify(res.data.details || {})}`);
+      setTimeout(() => setReplyStatus(''), 4000);
+      setReplyData({ id: null, reply: '', via: 'both' });
       setShowReply(false);
       fetchMessages();
     } catch (error) {
       console.error('Error sending reply:', error);
-      alert('Failed to send reply. Please try again.');
+      alert(error.response?.data?.error || 'Failed to send reply. Please try again.');
     }
   };
 
@@ -282,10 +287,10 @@ const Messages = () => {
                   Mark as Read
                 </button>
               )}
-              <button 
+                <button 
                 onClick={() => {
                   setShowReply(true);
-                  setReplyData({ id: selectedMessage.id, reply: '' });
+                  setReplyData({ id: selectedMessage.id, reply: '', via: 'both' });
                 }} 
                 className="action-btn reply"
               >
@@ -299,8 +304,27 @@ const Messages = () => {
               </button>
             </div>
 
+            {replyStatus && (
+              <div style={{ marginTop: '0.75rem', padding: '0.6rem 1rem', background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '0.5rem', color: '#0d9488', fontSize: '0.85rem' }}>
+                {replyStatus}
+              </div>
+            )}
+
             {showReply && replyData.id === selectedMessage.id && (
               <div className="reply-form">
+                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.85rem', cursor: 'pointer' }}>
+                    <input type="radio" name="via" value="both" checked={replyData.via === 'both'} onChange={e => setReplyData({ ...replyData, via: e.target.value })} /> Email + SMS
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.85rem', cursor: 'pointer' }}>
+                    <input type="radio" name="via" value="email" checked={replyData.via === 'email'} onChange={e => setReplyData({ ...replyData, via: e.target.value })} /> Email only
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.85rem', cursor: 'pointer' }}>
+                    <input type="radio" name="via" value="sms" checked={replyData.via === 'sms'} onChange={e => setReplyData({ ...replyData, via: e.target.value })} /> SMS only
+                  </label>
+                </div>
+                {selectedMessage.phone && <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Will send SMS to: {selectedMessage.phone}</p>}
+                {!selectedMessage.phone && replyData.via !== 'email' && <p style={{ fontSize: '0.8rem', color: '#dc2626', marginBottom: '0.5rem' }}>No phone number for this customer — SMS not possible.</p>}
                 <textarea
                   placeholder="Type your reply here..."
                   value={replyData.reply}
@@ -309,12 +333,12 @@ const Messages = () => {
                 />
                 <div className="reply-actions">
                   <button onClick={() => handleReply(selectedMessage.id)} className="send-btn">
-                    Send Reply
+                    Send via {replyData.via === 'both' ? 'Email + SMS' : replyData.via === 'sms' ? 'SMS' : 'Email'}
                   </button>
                   <button 
                     onClick={() => {
                       setShowReply(false);
-                      setReplyData({ id: null, reply: '' });
+                      setReplyData({ id: null, reply: '', via: 'both' });
                     }} 
                     className="cancel-btn"
                   >

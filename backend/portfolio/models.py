@@ -40,6 +40,7 @@ class ContactMessage(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=20, blank=True)
+    country_code = models.CharField(max_length=5, blank=True, default="TZ")
     subject = models.CharField(max_length=200)
     message = models.TextField()
     is_read = models.BooleanField(default=False)
@@ -138,6 +139,73 @@ class EmailLog(models.Model):
     
     def __str__(self):
         return f"Email to {self.recipient} - {self.status}"
+
+class Experience(models.Model):
+    CATEGORY_CHOICES = [
+        ('mobile', 'Mobile Development'),
+        ('web', 'Web Development'),
+        ('cybersecurity', 'Cybersecurity'),
+        ('networking', 'Networking'),
+    ]
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    category = models.CharField(max_length=30, choices=CATEGORY_CHOICES)
+    years = models.DecimalField(max_digits=3, decimal_places=1, default=1.0)
+    icon = models.CharField(max_length=100, blank=True)
+    image_url = models.URLField(blank=True, null=True)
+    order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return self.title
+
+
+class Client(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    image_url = models.URLField(blank=True, null=True)
+    company = models.CharField(max_length=200, blank=True)
+    testimonial = models.TextField(blank=True)
+    rating = models.IntegerField(default=5)
+    order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return self.name
+
+
+class Education(models.Model):
+    LEVEL_CHOICES = [
+        ('primary', 'Primary'),
+        ('secondary', 'Secondary'),
+        ('advanced', 'Advanced'),
+        ('university', 'University'),
+    ]
+    institution = models.CharField(max_length=300)
+    level = models.CharField(max_length=20, choices=LEVEL_CHOICES)
+    start_year = models.IntegerField()
+    end_year = models.IntegerField(null=True, blank=True)
+    description = models.TextField(blank=True)
+    course = models.CharField(max_length=300, blank=True)
+    is_current = models.BooleanField(default=False)
+    order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', 'start_year']
+
+    def __str__(self):
+        return f"{self.institution} ({self.start_year}-{self.end_year or 'Ongoing'})"
+
 
 class SystemLog(models.Model):
     action = models.CharField(max_length=100)

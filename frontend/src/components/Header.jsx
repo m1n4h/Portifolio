@@ -9,9 +9,7 @@ const Header = () => {
   const { setCursorType, setCursorText } = useCursor()
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
+    const handleScroll = () => setScrolled(window.scrollY > 50)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -19,6 +17,7 @@ const Header = () => {
   const navItems = [
     { name: 'Home', href: '#hero' },
     { name: 'About', href: '#about' },
+    { name: 'Education', href: '#about' },
     { name: 'Skills', href: '#skills' },
     { name: 'Projects', href: '#projects' },
     { name: 'Contact', href: '#contact' }
@@ -34,28 +33,24 @@ const Header = () => {
     >
       <div className="header-container">
         <div className="logo">
-          <motion.h3
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            Amina Kalonge
-          </motion.h3>
+          <a href="#hero" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+            <img
+              src="/images/logo.png"
+              alt="M1N4H"
+              className="logo-img"
+              onError={(e) => { e.target.style.display = 'none'; e.target.nextElementSibling.style.display = 'block' }}
+            />
+            <span className="logo-fallback" style={{ display: 'none' }}>M1N4H</span>
+          </a>
         </div>
 
-        {/* Navigation Links - Desktop */}
         <div className="nav-menu">
           {navItems.map((item) => (
             <a
               key={item.name}
               href={item.href}
-              onMouseEnter={() => {
-                setCursorType('hover')
-                setCursorText(`Go to ${item.name}`)
-              }}
-              onMouseLeave={() => {
-                setCursorType('default')
-                setCursorText('')
-              }}
+              onMouseEnter={() => { setCursorType('hover'); setCursorText(`Go to ${item.name}`) }}
+              onMouseLeave={() => { setCursorType('default'); setCursorText('') }}
             >
               {item.name}
             </a>
@@ -66,16 +61,9 @@ const Header = () => {
           <motion.button
             className="theme-toggle"
             onClick={toggleTheme}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onMouseEnter={() => {
-              setCursorType('hover')
-              setCursorText(isDark ? 'Light Mode' : 'Dark Mode')
-            }}
-            onMouseLeave={() => {
-              setCursorType('default')
-              setCursorText('')
-            }}
+            whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+            onMouseEnter={() => { setCursorType('hover'); setCursorText(isDark ? 'Light Mode' : 'Dark Mode') }}
+            onMouseLeave={() => { setCursorType('default'); setCursorText('') }}
           >
             {isDark ? '☀️' : '🌙'}
           </motion.button>

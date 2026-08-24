@@ -54,7 +54,7 @@ const Skills = () => {
   const handleCategoryFilter = (category) => {
     setActiveCategory(category)
     setShowAll(false)
-    const filtered = category === 'all' ? skills : skills.filter(skill => skill.category === category)
+    const filtered = category === 'all' ? skills : skills.filter(skill => skill.category === activeCategory)
     setDisplayedSkills(filtered.slice(0, 3))
   }
 
@@ -126,23 +126,26 @@ const Skills = () => {
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <div className="skill-icon">
-                  {skill.image_url ? (
-                    <img 
-                      src={skill.image_url} 
-                      alt={skill.name} 
-                      className="skill-image"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.style.display = 'none';
-                        const fallback = document.createElement('span');
-                        fallback.textContent = skill.icon || '💻';
-                        e.target.parentElement.appendChild(fallback);
-                      }}
-                    />
-                  ) : (
-                    <span>{skill.icon || '💻'}</span>
-                  )}
+                <div className="skill-icon-wrapper">
+                  <div className="skill-orbit-ring" />
+                  <div className="skill-icon">
+                    {skill.image_url ? (
+                      <img 
+                        src={skill.image_url} 
+                        alt={skill.name} 
+                        className="skill-image"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.style.display = 'none';
+                          const fallback = document.createElement('span');
+                          fallback.textContent = skill.icon || '💻';
+                          e.target.parentElement.appendChild(fallback);
+                        }}
+                      />
+                    ) : (
+                      <span>{skill.icon || '💻'}</span>
+                    )}
+                  </div>
                 </div>
                 <h3 className="skill-name">{skill.name}</h3>
                 <div className="skill-progress">
@@ -179,6 +182,73 @@ const Skills = () => {
           </motion.div>
         )}
       </div>
+
+      <style>{`
+        .skill-icon-wrapper {
+          position: relative;
+          width: 80px;
+          height: 80px;
+          margin: 0 auto 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .skill-orbit-ring {
+          position: absolute;
+          top: -4px;
+          left: -4px;
+          right: -4px;
+          bottom: -4px;
+          border-radius: 50%;
+          border: 2px solid transparent;
+          border-top-color: var(--accent, #1a6fb5);
+          border-right-color: var(--accent, #1a6fb5);
+          animation: spinOrbit 2s linear infinite;
+          pointer-events: none;
+        }
+
+        .skill-orbit-ring::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 6px;
+          height: 6px;
+          background: var(--accent, #1a6fb5);
+          border-radius: 50%;
+          transform: translate(-50%, -50%);
+          animation: pulseDot 2s ease-in-out infinite;
+        }
+
+        .skill-icon {
+          position: relative;
+          z-index: 1;
+          width: 72px;
+          height: 72px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          overflow: hidden;
+        }
+
+        .skill-icon .skill-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        @keyframes spinOrbit {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulseDot {
+          0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+          50% { opacity: 1; transform: translate(-50%, -50%) scale(1.5); }
+        }
+      `}</style>
     </section>
   )
 }
