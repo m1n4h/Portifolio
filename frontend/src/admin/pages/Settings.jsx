@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Settings.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/';
 
 const Settings = () => {
   const [user, setUser] = useState(null);
@@ -46,7 +46,7 @@ const Settings = () => {
     setError('');
     try {
       const response = await axios.get(`${API_URL}auth/me/`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Token ${token}` }
       });
       setUser(response.data);
       setProfileData({
@@ -70,26 +70,17 @@ const Settings = () => {
     setSubmitting(true);
 
     try {
-      await axios.post(`${API_URL}auth/change_password/`, {
-        current_password: passwordData.current_password,
-        new_password: passwordData.new_password,
-        confirm_password: passwordData.confirm_password,
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setSuccess('Password updated successfully!');
-      setPasswordData({
-        current_password: '',
-        new_password: '',
-        confirm_password: '',
-      });
+      // Save profile data to localStorage (user data is read-only from backend)
+      const userData = JSON.parse(localStorage.getItem('user_data') || '{}');
+      userData.first_name = profileData.first_name;
+      userData.last_name = profileData.last_name;
+      localStorage.setItem('user_data', JSON.stringify(userData));
+      setUser(prev => ({ ...prev, ...profileData }));
+      setSuccess('Profile updated successfully!');
+      setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
-      console.error('Error updating password:', error);
-      if (error.response) {
-        setError(error.response.data.error || error.response.data.message || 'Failed to update password.');
-      } else {
-        setError('Network error. Please check your connection.');
-      }
+      console.error('Error updating profile:', error);
+      setError('Failed to update profile.');
     } finally {
       setSubmitting(false);
     }
@@ -118,7 +109,7 @@ const Settings = () => {
         new_password: passwordData.new_password,
         confirm_password: passwordData.confirm_password,
       }, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Token ${token}` }
       });
       setSuccess('Password updated successfully!');
       setPasswordData({

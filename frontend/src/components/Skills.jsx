@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/'
+const REFRESH_INTERVAL = 30000
 
 const Skills = () => {
   const [skills, setSkills] = useState([])
@@ -14,22 +15,26 @@ const Skills = () => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, threshold: 0.3 })
 
-  useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-<<<<<<< HEAD
-        const response = await axios.get(`${API_URL}skills/`)
-=======
-        const response = await axios.get('http://localhost:8000/api/skills/')
->>>>>>> origin/main
-        setSkills(response.data)
-        setDisplayedSkills(response.data.slice(0, 3))
-      } catch (error) {
-        console.error('Error fetching skills:', error)
-      }
+  const fetchSkills = useCallback(async () => {
+    try {
+      const response = await axios.get(`${API_URL}skills/`)
+      setSkills(response.data)
+      setDisplayedSkills(prev => {
+        if (prev.length === 0 || JSON.stringify(prev) !== JSON.stringify(response.data.slice(0, 3))) {
+          return response.data.slice(0, 3)
+        }
+        return prev
+      })
+    } catch (error) {
+      console.error('Error fetching skills:', error)
     }
-    fetchSkills()
   }, [])
+
+  useEffect(() => {
+    fetchSkills()
+    const interval = setInterval(fetchSkills, REFRESH_INTERVAL)
+    return () => clearInterval(interval)
+  }, [fetchSkills])
 
   const categories = ['all', 'frontend', 'backend', 'mobile', 'database', 'tools', 'design', 'devops']
   
@@ -130,13 +135,9 @@ const Skills = () => {
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.style.display = 'none';
-<<<<<<< HEAD
                         const fallback = document.createElement('span');
                         fallback.textContent = skill.icon || '💻';
                         e.target.parentElement.appendChild(fallback);
-=======
-                        e.target.parentElement.innerHTML = `<span>💻</span>`;
->>>>>>> origin/main
                       }}
                     />
                   ) : (

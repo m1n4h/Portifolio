@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ 
@@ -102,7 +102,7 @@ const Login = () => {
 
       <div className="login-container">
         <div className="login-brand">
-          <span className="brand-icon">🚀</span>
+          <span className="brand-icon"></span>
           <h2>Portfolio Admin</h2>
           <p>Login to manage your portfolio</p>
         </div>
@@ -118,7 +118,7 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
               <label htmlFor="username">
-                <span className="label-icon">👤</span>
+                <span className="label-icon"></span>
                 Username
               </label>
               <input
@@ -136,7 +136,7 @@ const Login = () => {
 
             <div className="form-group">
               <label htmlFor="password">
-                <span className="label-icon">🔒</span>
+                <span className="label-icon"></span>
                 Password
               </label>
               <input

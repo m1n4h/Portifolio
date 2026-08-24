@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-x8l(j6$_i@+5vndr5=11xgr#com@8c567&v8$fl#en5_v#ocej')
 
 
-DEBUG = os.environ.get('DEBUG', 'false') == 'false'
+DEBUG = os.environ.get('DEBUG', 'false').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0').split(',')
 
@@ -154,7 +154,6 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     ],
 }
 

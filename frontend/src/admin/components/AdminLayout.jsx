@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { useAdminTheme } from '../contexts/AdminThemeContext';
 import './AdminLayout.css';
 
 const AdminLayout = () => {
@@ -7,23 +8,20 @@ const AdminLayout = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const { isDark, toggleTheme } = useAdminTheme();
 
   useEffect(() => {
-    // Check authentication
     const token = localStorage.getItem('access_token');
     if (!token) {
       navigate('/admin/login');
       return;
     }
 
-    // Get user info
     const userData = localStorage.getItem('user_data');
     if (userData) {
       setUser(JSON.parse(userData));
     }
-<<<<<<< HEAD
 
-    // Listen for storage changes (e.g., avatar updated in Settings)
     const handleStorageChange = (e) => {
       if (e.key === 'user_data') {
         const newData = localStorage.getItem('user_data');
@@ -35,8 +33,6 @@ const AdminLayout = () => {
     window.addEventListener('storage', handleStorageChange);
 
     return () => window.removeEventListener('storage', handleStorageChange);
-=======
->>>>>>> origin/main
   }, [navigate]);
 
   const handleLogout = () => {
@@ -49,17 +45,26 @@ const AdminLayout = () => {
     return location.pathname === path ? 'active' : '';
   };
 
-  // If no user, don't render
   if (!user) {
     return null;
   }
 
+  const navItems = [
+    { to: '/admin/dashboard', label: 'Dashboard'},
+    { to: '/admin/skills', label: 'Skills' },
+    { to: '/admin/projects', label: 'Projects' },
+    { to: '/admin/messages', label: 'Messages'},
+    { to: '/admin/analytics', label: 'Analytics'},
+    { to: '/admin/activities', label: 'Activities'},
+    { to: '/admin/settings', label: 'Settings', icon: '⚙' },
+  ];
+
   return (
-    <div className="admin-layout">
+    <div className={`admin-layout ${isDark ? 'dark' : 'light'}`}>
       <aside className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
           <h2>{isSidebarOpen ? 'Portfolio Admin' : 'PA'}</h2>
-          <button 
+          <button
             className="toggle-btn"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
@@ -68,70 +73,21 @@ const AdminLayout = () => {
         </div>
 
         <nav className="sidebar-nav">
-          <Link to="/admin/dashboard" className={isActive('/admin/dashboard')}>
-<<<<<<< HEAD
-            <span className="nav-icon"></span>
-            {isSidebarOpen && <span>Dashboard</span>}
-          </Link>
-          <Link to="/admin/skills" className={isActive('/admin/skills')}>
-            <span className="nav-icon"></span>
-            {isSidebarOpen && <span>Skills</span>}
-          </Link>
-          <Link to="/admin/projects" className={isActive('/admin/projects')}>
-            <span className="nav-icon"></span>
-            {isSidebarOpen && <span>Projects</span>}
-          </Link>
-          <Link to="/admin/messages" className={isActive('/admin/messages')}>
-            <span className="nav-icon"></span>
-            {isSidebarOpen && <span>Messages</span>}
-          </Link>
-          <Link to="/admin/analytics" className={isActive('/admin/analytics')}>
-            <span className="nav-icon"></span>
-            {isSidebarOpen && <span>Analytics</span>}
-          </Link>
-          <Link to="/admin/activities" className={isActive('/admin/activities')}>
-            <span className="nav-icon"></span>
-            {isSidebarOpen && <span>Activities</span>}
-          </Link>
-          <Link to="/admin/settings" className={isActive('/admin/settings')}>
-            <span className="nav-icon"></span>
-            {isSidebarOpen && <span>Settings</span>}
-          </Link>
-=======
-            <span className="nav-icon">📊</span>
-            {isSidebarOpen && <span>Dashboard</span>}
-          </Link>
-          <Link to="/admin/skills" className={isActive('/admin/skills')}>
-            <span className="nav-icon">💻</span>
-            {isSidebarOpen && <span>Skills</span>}
-          </Link>
-          <Link to="/admin/projects" className={isActive('/admin/projects')}>
-            <span className="nav-icon">📁</span>
-            {isSidebarOpen && <span>Projects</span>}
-          </Link>
-          <Link to="/admin/messages" className={isActive('/admin/messages')}>
-            <span className="nav-icon">✉️</span>
-            {isSidebarOpen && <span>Messages</span>}
-          </Link>
-          <Link to="/admin/analytics" className={isActive('/admin/analytics')}>
-            <span className="nav-icon">📈</span>
-            {isSidebarOpen && <span>Analytics</span>}
-          </Link>
-          <Link to="/admin/activities" className={isActive('/admin/activities')}>
-            <span className="nav-icon">👤</span>
-            {isSidebarOpen && <span>Activities</span>}
-          </Link>
->>>>>>> origin/main
+          {navItems.map((item) => (
+            <Link key={item.to} to={item.to} className={isActive(item.to)}>
+              <span className="nav-icon">{item.icon}</span>
+              {isSidebarOpen && <span>{item.label}</span>}
+            </Link>
+          ))}
         </nav>
 
         <div className="sidebar-footer">
           <div className="user-info">
             <div className="user-avatar">
-<<<<<<< HEAD
               {user?.avatar_url ? (
-                <img 
-                  src={user.avatar_url} 
-                  alt={user.username} 
+                <img
+                  src={user.avatar_url}
+                  alt={user.username}
                   className="avatar-image"
                   onError={(e) => {
                     e.target.onerror = null;
@@ -143,9 +99,6 @@ const AdminLayout = () => {
               <span className="avatar-fallback" style={{ display: user?.avatar_url ? 'none' : 'flex' }}>
                 {user?.username?.charAt(0).toUpperCase() || 'A'}
               </span>
-=======
-              {user?.username?.charAt(0).toUpperCase() || 'A'}
->>>>>>> origin/main
             </div>
             {isSidebarOpen && (
               <div className="user-details">
@@ -154,12 +107,14 @@ const AdminLayout = () => {
               </div>
             )}
           </div>
+
+          <button onClick={toggleTheme} className="theme-toggle-btn" title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>
+            <span className="theme-icon">{isDark ? '☀' : '🌙'}</span>
+            {isSidebarOpen && <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>}
+          </button>
+
           <button onClick={handleLogout} className="logout-btn">
-<<<<<<< HEAD
-            <span></span>
-=======
-            <span>🚪</span>
->>>>>>> origin/main
+            <span className="logout-icon">⏻</span>
             {isSidebarOpen && <span>Logout</span>}
           </button>
         </div>
@@ -172,6 +127,9 @@ const AdminLayout = () => {
             <span className="header-subtitle">Manage your portfolio content</span>
           </div>
           <div className="header-right">
+            <button onClick={toggleTheme} className="header-theme-toggle" title={isDark ? 'Light mode' : 'Dark mode'}>
+              {isDark ? '☀' : '🌙'}
+            </button>
             <span className="header-time">
               {new Date().toLocaleString()}
             </span>

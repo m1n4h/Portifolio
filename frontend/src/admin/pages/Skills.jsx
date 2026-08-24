@@ -1,163 +1,8 @@
-<<<<<<< HEAD
-=======
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-// import './Skills.css';
-
-// const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/';
-
-// const Skills = () => {
-//   const [skills, setSkills] = useState([]);
-//   const [editingSkill, setEditingSkill] = useState(null);
-//   const [formData, setFormData] = useState({
-//     name: '',
-//     category: 'frontend',
-//     proficiency: 80,
-//     icon: '',
-//     description: '',
-//   });
-//   const [loading, setLoading] = useState(false);
-//   const token = localStorage.getItem('access_token');
-
-//   useEffect(() => {
-//     fetchSkills();
-//   }, []);
-
-//   const fetchSkills = async () => {
-//     setLoading(true);
-//     try {
-//       const response = await axios.get(`${API_URL}skills/`, {
-//         headers: { Authorization: `Bearer ${token}` }
-//       });
-//       setSkills(response.data);
-//     } catch (error) {
-//       console.error('Error fetching skills:', error);
-//     }
-//     setLoading(false);
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     try {
-//       if (editingSkill) {
-//         await axios.put(`${API_URL}skills/${editingSkill.id}/`, formData, {
-//           headers: { Authorization: `Bearer ${token}` }
-//         });
-//       } else {
-//         await axios.post(`${API_URL}skills/`, formData, {
-//           headers: { Authorization: `Bearer ${token}` }
-//         });
-//       }
-//       setFormData({ name: '', category: 'frontend', proficiency: 80, icon: '', description: '' });
-//       setEditingSkill(null);
-//       fetchSkills();
-//     } catch (error) {
-//       console.error('Error saving skill:', error);
-//     }
-//   };
-
-//   const handleDelete = async (id) => {
-//     if (window.confirm('Are you sure you want to delete this skill?')) {
-//       try {
-//         await axios.delete(`${API_URL}skills/${id}/`, {
-//           headers: { Authorization: `Bearer ${token}` }
-//         });
-//         fetchSkills();
-//       } catch (error) {
-//         console.error('Error deleting skill:', error);
-//       }
-//     }
-//   };
-
-//   return (
-//     <div className="skills-management">
-//       <h1>Manage Skills</h1>
-//       <form onSubmit={handleSubmit} className="skill-form">
-//         <input
-//           type="text"
-//           placeholder="Skill Name"
-//           value={formData.name}
-//           onChange={(e) => setFormData({...formData, name: e.target.value})}
-//           required
-//         />
-//         <select
-//           value={formData.category}
-//           onChange={(e) => setFormData({...formData, category: e.target.value})}
-//         >
-//           <option value="frontend">Frontend</option>
-//           <option value="backend">Backend</option>
-//           <option value="database">Database</option>
-//           <option value="tools">Tools</option>
-//           <option value="design">Design</option>
-//           <option value="devops">DevOps</option>
-//         </select>
-//         <input
-//           type="number"
-//           placeholder="Proficiency (1-100)"
-//           value={formData.proficiency}
-//           onChange={(e) => setFormData({...formData, proficiency: parseInt(e.target.value)})}
-//           min="1"
-//           max="100"
-//           required
-//         />
-//         <input
-//           type="text"
-//           placeholder="Icon"
-//           value={formData.icon}
-//           onChange={(e) => setFormData({...formData, icon: e.target.value})}
-//         />
-//         <textarea
-//           placeholder="Description"
-//           value={formData.description}
-//           onChange={(e) => setFormData({...formData, description: e.target.value})}
-//         />
-//         <button type="submit">
-//           {editingSkill ? 'Update Skill' : 'Add Skill'}
-//         </button>
-//       </form>
-
-//       <div className="skills-list">
-//         {loading ? (
-//           <p>Loading...</p>
-//         ) : (
-//           skills.map((skill) => (
-//             <div key={skill.id} className="skill-item">
-//               <div className="skill-info">
-//                 <h3>{skill.icon && <span>{skill.icon}</span>} {skill.name}</h3>
-//                 <p>Category: {skill.category}</p>
-//                 <p>Proficiency: {skill.proficiency}%</p>
-//                 <div className="progress-bar">
-//                   <div style={{ width: `${skill.proficiency}%` }}></div>
-//                 </div>
-//               </div>
-//               <div className="skill-actions">
-//                 <button onClick={() => {
-//                   setEditingSkill(skill);
-//                   setFormData({
-//                     name: skill.name,
-//                     category: skill.category,
-//                     proficiency: skill.proficiency,
-//                     icon: skill.icon || '',
-//                     description: skill.description || '',
-//                   });
-//                 }}>✏️ Edit</button>
-//                 <button onClick={() => handleDelete(skill.id)}>🗑️ Delete</button>
-//               </div>
-//             </div>
-//           ))
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Skills;
->>>>>>> origin/main
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Skills.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/';
 
 const Skills = () => {
   const [skills, setSkills] = useState([]);
@@ -171,6 +16,7 @@ const Skills = () => {
     category: 'frontend',
     proficiency: 80,
     icon: '',
+    image_url: '',
     description: '',
   });
   const token = localStorage.getItem('access_token');
@@ -184,7 +30,7 @@ const Skills = () => {
     setError('');
     try {
       const response = await axios.get(`${API_URL}skills/`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Token ${token}` }
       });
       setSkills(response.data);
     } catch (error) {
@@ -247,16 +93,16 @@ const Skills = () => {
         response = await axios.put(
           `${API_URL}skills/${editingSkill.id}/`,
           formData,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Token ${token}` } }
         );
-        setSuccess('✅ Skill updated successfully!');
+        setSuccess('Skill updated successfully!');
       } else {
         response = await axios.post(
           `${API_URL}skills/`,
           formData,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Token ${token}` } }
         );
-        setSuccess('✅ Skill added successfully!');
+        setSuccess('Skill added successfully!');
       }
 
       // Reset form
@@ -265,6 +111,7 @@ const Skills = () => {
         category: 'frontend',
         proficiency: 80,
         icon: '',
+        image_url: '',
         description: '',
       });
       setEditingSkill(null);
@@ -300,9 +147,9 @@ const Skills = () => {
     setSubmitting(true);
     try {
       await axios.delete(`${API_URL}skills/${id}/`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Token ${token}` }
       });
-      setSuccess('✅ Skill deleted successfully!');
+      setSuccess('Skill deleted successfully!');
       await fetchSkills();
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
@@ -320,6 +167,7 @@ const Skills = () => {
       category: skill.category,
       proficiency: skill.proficiency,
       icon: skill.icon || '',
+      image_url: skill.image_url || '',
       description: skill.description || '',
     });
     setError('');
@@ -333,6 +181,7 @@ const Skills = () => {
       category: 'frontend',
       proficiency: 80,
       icon: '',
+      image_url: '',
       description: '',
     });
     setError('');
@@ -348,7 +197,7 @@ const Skills = () => {
 
       {error && (
         <div className="error-message">
-          <span className="error-icon">❌</span>
+          <span className="error-icon">!</span>
           {error}
           <button onClick={() => setError('')} className="close-btn">×</button>
         </div>
@@ -356,7 +205,7 @@ const Skills = () => {
 
       {success && (
         <div className="success-message">
-          <span className="success-icon">✅</span>
+          <span className="success-icon">✓</span>
           {success}
           <button onClick={() => setSuccess('')} className="close-btn">×</button>
         </div>
@@ -384,7 +233,7 @@ const Skills = () => {
               s.name.toLowerCase() === formData.name.toLowerCase() && 
               s.id !== editingSkill?.id
             ) && (
-              <small className="duplicate-warning">⚠️ This skill already exists</small>
+              <small className="duplicate-warning">This skill already exists</small>
             )}
           </div>
 
@@ -428,6 +277,17 @@ const Skills = () => {
               placeholder="e.g., ⚛️ or fa-react"
               value={formData.icon}
               onChange={(e) => setFormData({...formData, icon: e.target.value})}
+              disabled={submitting}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Image URL (for real images)</label>
+            <input
+              type="url"
+              placeholder="https://example.com/skill-logo.png"
+              value={formData.image_url}
+              onChange={(e) => setFormData({...formData, image_url: e.target.value})}
               disabled={submitting}
             />
           </div>
@@ -475,7 +335,7 @@ const Skills = () => {
             <div key={skill.id} className="skill-item">
               <div className="skill-info">
                 <div className="skill-header">
-                  <h3>{skill.icon && <span className="skill-icon">{skill.icon}</span>} {skill.name}</h3>
+                  <h3>{skill.name}</h3>
                   <span className="skill-category">{skill.category}</span>
                 </div>
                 <p className="skill-description">{skill.description || 'No description'}</p>
@@ -492,14 +352,14 @@ const Skills = () => {
                   className="edit-btn"
                   disabled={submitting}
                 >
-                  ✏️ Edit
+                  Edit
                 </button>
                 <button 
                   onClick={() => handleDelete(skill.id)} 
                   className="delete-btn"
                   disabled={submitting}
                 >
-                  🗑️ Delete
+                  Delete
                 </button>
               </div>
             </div>

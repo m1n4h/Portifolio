@@ -5,6 +5,8 @@ import { useRef } from 'react'
 import axios from 'axios'
 import { useCursor } from '../contexts/CursorContext'
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/'
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -34,8 +36,6 @@ const Contact = () => {
     setSubmitMessage('')
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/'
-      
       const response = await axios.post(`${API_URL}contact/`, formData, {
         headers: {
           'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ const Contact = () => {
       console.log('Message sent successfully:', response.data)
       
       setSubmitStatus('success')
-      setSubmitMessage('✅ Message sent successfully! I\'ll get back to you soon.')
+      setSubmitMessage('Message sent successfully! I\'ll get back to you soon.')
       setFormData({
         name: '',
         email: '',
@@ -58,13 +58,13 @@ const Contact = () => {
       
       if (error.response) {
         setSubmitStatus('error')
-        setSubmitMessage(error.response.data.error || '❌ Failed to send message. Please try again.')
+        setSubmitMessage(error.response.data.error || 'Failed to send message. Please try again.')
       } else if (error.request) {
         setSubmitStatus('error')
-        setSubmitMessage('❌ Unable to connect to server. Please check your connection.')
+        setSubmitMessage('Unable to connect to server. Please check your connection.')
       } else {
         setSubmitStatus('error')
-        setSubmitMessage('❌ An error occurred. Please try again.')
+        setSubmitMessage('An error occurred. Please try again.')
       }
     } finally {
       setIsSubmitting(false)

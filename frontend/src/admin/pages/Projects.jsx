@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './projects.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/';
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -36,7 +36,7 @@ const Projects = () => {
     setError('');
     try {
       const response = await axios.get(`${API_URL}projects/`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Token ${token}` }
       });
       setProjects(response.data);
     } catch (error) {
@@ -123,14 +123,14 @@ const Projects = () => {
         response = await axios.put(
           `${API_URL}projects/${editingProject.id}/`,
           formData,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Token ${token}` } }
         );
         setSuccess('✅ Project updated successfully!');
       } else {
         response = await axios.post(
           `${API_URL}projects/`,
           formData,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Token ${token}` } }
         );
         setSuccess('✅ Project added successfully!');
       }
@@ -178,7 +178,7 @@ const Projects = () => {
     setSubmitting(true);
     try {
       await axios.delete(`${API_URL}projects/${id}/`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Token ${token}` }
       });
       setSuccess('✅ Project deleted successfully!');
       await fetchProjects();

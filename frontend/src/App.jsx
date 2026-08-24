@@ -13,7 +13,8 @@ import Footer from './components/Footer';
 import SideNav from './components/SideNav';
 import './styles/global.scss';
 
-// Admin imports - MAKE SURE THESE FILES EXIST
+// Admin imports
+import { AdminThemeProvider } from './admin/contexts/AdminThemeContext';
 import AdminLayout from './admin/components/AdminLayout';
 import Login from './admin/pages/Login';
 import Dashboard from './admin/pages/Dashboard';
@@ -22,10 +23,7 @@ import ProjectsManagement from './admin/pages/Projects';
 import MessagesManagement from './admin/pages/Messages';
 import Analytics from './admin/pages/Analytics';
 import Activities from './admin/pages/Activities';
-<<<<<<< HEAD
 import Settings from './admin/pages/Settings';
-=======
->>>>>>> origin/main
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -71,7 +69,9 @@ function App() {
           path="/admin"
           element={
             <ProtectedRoute>
-              <AdminLayout />
+              <AdminThemeProvider>
+                <AdminLayout />
+              </AdminThemeProvider>
             </ProtectedRoute>
           }
         >
@@ -82,10 +82,7 @@ function App() {
           <Route path="messages" element={<MessagesManagement />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="activities" element={<Activities />} />
-<<<<<<< HEAD
           <Route path="settings" element={<Settings />} />
-=======
->>>>>>> origin/main
         </Route>
 
         {/* Catch all - redirect to home */}

@@ -39,7 +39,8 @@ const Hero = () => {
           Amina Kalonge
         </motion.h1>
         <motion.h2 variants={itemVariants} className="hero-subtitle">
-          Full-Stack & Mobile Developer
+          software Engineer | Cybersecurity Enthusiast | Mobile App Developer
+         
         </motion.h2>
         <motion.p variants={itemVariants} className="hero-description">
           I am a passionate Software Developer with a strong focus on Mobile Application

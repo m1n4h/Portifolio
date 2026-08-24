@@ -27,7 +27,7 @@ ChartJS.register(
   LineElement
 );
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/';
 
 const Analytics = () => {
   const [analyticsData, setAnalyticsData] = useState(null);
@@ -41,7 +41,7 @@ const Analytics = () => {
   const fetchAnalytics = async () => {
     try {
       const response = await axios.get(`${API_URL}dashboard/analytics/`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Token ${token}` }
       });
       setAnalyticsData(response.data);
       setLoading(false);

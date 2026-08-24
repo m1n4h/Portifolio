@@ -17,7 +17,7 @@
 
 .page-header h1 {
   font-size: 28px;
-  color: #2d3748;
+  color: var(--text-primary, #2d3748);
   margin: 0;
 }
 
@@ -30,7 +30,6 @@
   font-weight: 600;
 }
 
-/* Error & Success Messages */
 .error-message,
 .success-message {
   padding: 12px 16px;
@@ -69,18 +68,18 @@
   padding: 0 5px;
 }
 
-/* Form */
 .skill-form {
-  background: white;
+  background: var(--bg-card, #ffffff);
   padding: 25px;
   border-radius: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   margin-bottom: 30px;
+  transition: background 0.3s ease;
 }
 
 .skill-form h3 {
   margin: 0 0 20px 0;
-  color: #2d3748;
+  color: var(--text-primary, #2d3748);
   font-size: 20px;
 }
 
@@ -103,18 +102,20 @@
 .form-group label {
   font-size: 14px;
   font-weight: 600;
-  color: #4a5568;
+  color: var(--text-secondary, #4a5568);
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   padding: 10px 14px;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--border-color, #e2e8f0);
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.2s;
   width: 100%;
+  background: var(--bg-card, #ffffff);
+  color: var(--text-primary, #2d3748);
 }
 
 .form-group input:focus,
@@ -148,7 +149,7 @@
   height: 6px;
   -webkit-appearance: none;
   appearance: none;
-  background: #e2e8f0;
+  background: var(--border-color, #e2e8f0);
   border-radius: 3px;
 }
 
@@ -198,8 +199,8 @@
 
 .cancel-btn {
   padding: 12px 30px;
-  background: #e2e8f0;
-  color: #4a5568;
+  background: var(--border-color, #e2e8f0);
+  color: var(--text-secondary, #4a5568);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -209,7 +210,7 @@
 }
 
 .cancel-btn:hover:not(:disabled) {
-  background: #cbd5e0;
+  background: var(--text-muted, #cbd5e0);
 }
 
 /* Skills List */
@@ -220,11 +221,11 @@
 }
 
 .skill-item {
-  background: white;
+  background: var(--bg-card, #ffffff);
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -244,7 +245,7 @@
 
 .skill-header h3 {
   margin: 0;
-  color: #2d3748;
+  color: var(--text-primary, #2d3748);
   font-size: 18px;
 }
 
@@ -253,16 +254,16 @@
 }
 
 .skill-category {
-  background: #f7fafc;
+  background: var(--bg-primary, #f7fafc);
   padding: 2px 12px;
   border-radius: 12px;
   font-size: 12px;
-  color: #4a5568;
+  color: var(--text-secondary, #4a5568);
   text-transform: capitalize;
 }
 
 .skill-description {
-  color: #718096;
+  color: var(--text-secondary, #718096);
   font-size: 14px;
   margin: 8px 0;
   flex: 1;
@@ -278,7 +279,7 @@
 .progress-bar {
   flex: 1;
   height: 8px;
-  background: #e2e8f0;
+  background: var(--border-color, #e2e8f0);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -293,7 +294,7 @@
 .proficiency-text {
   font-size: 14px;
   font-weight: 600;
-  color: #4a5568;
+  color: var(--text-secondary, #4a5568);
   min-width: 40px;
 }
 
@@ -335,20 +336,17 @@
 .no-skills {
   text-align: center;
   padding: 40px;
-  color: #a0aec0;
+  color: var(--text-muted, #a0aec0);
   grid-column: 1 / -1;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .form-grid {
     grid-template-columns: 1fr;
   }
-  
   .skills-list {
     grid-template-columns: 1fr;
   }
-  
   .page-header {
     flex-direction: column;
     align-items: flex-start;
@@ -360,11 +358,9 @@
   .skill-item {
     padding: 15px;
   }
-  
   .skill-actions {
     flex-direction: column;
   }
-  
   .skill-actions button {
     width: 100%;
   }

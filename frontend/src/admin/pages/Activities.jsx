@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Activities.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/';
 
 const Activities = () => {
   const [activities, setActivities] = useState([]);
@@ -18,7 +18,7 @@ const Activities = () => {
   const fetchActivities = async () => {
     try {
       const response = await axios.get(`${API_URL}dashboard/recent_activity/`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Token ${token}` }
       });
       setActivities(response.data);
       setLoading(false);

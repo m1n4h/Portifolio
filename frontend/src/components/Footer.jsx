@@ -16,22 +16,18 @@ const Footer = () => {
   ]
 
   const socialLinks = [
-    { name: 'GitHub', url: 'https://github.com/aminakalonge', icon: '🐙' },
-    { name: 'LinkedIn', url: 'https://linkedin.com/in/aminakalonge', icon: '💼' },
-    { name: 'Twitter', url: 'https://twitter.com/aminakalonge', icon: '🐦' },
-    { name: 'Instagram', url: 'https://instagram.com/aminakalonge', icon: '📷' }
+    { name: 'GitHub', url: 'https://github.com/aminakalonge', icon: '/images/social/github.svg' },
+    { name: 'LinkedIn', url: 'https://linkedin.com/in/aminakalonge', icon: '/images/social/linkedin.svg' },
+    { name: 'Twitter', url: 'https://twitter.com/aminakalonge', icon: '/images/social/twitter.svg' },
+    { name: 'Instagram', url: 'https://instagram.com/aminakalonge', icon: '/images/social/instagram.svg' }
   ]
 
   return (  
     <footer className="footer">
       <div className="container">
-<<<<<<< HEAD
         <div className="footer-grid">
           {/* Brand Section */}
          
-=======
-        <div className="footer-content">
->>>>>>> origin/main
           <motion.div 
             className="footer-links"
             initial={{ opacity: 0, y: 30 }}

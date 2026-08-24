@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
 import axios from 'axios'
 import { useCursor } from '../contexts/CursorContext'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/'
+const REFRESH_INTERVAL = 30000
 
 const Projects = () => {
   const [projects, setProjects] = useState([])
@@ -16,22 +17,26 @@ const Projects = () => {
   const isInView = useInView(ref, { once: true, threshold: 0.3 })
   const { setCursorType, setCursorText } = useCursor()
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-<<<<<<< HEAD
-        const response = await axios.get(`${API_URL}projects/`)
-=======
-        const response = await axios.get('http://localhost:8000/api/projects/')
->>>>>>> origin/main
-        setProjects(response.data)
-        setDisplayedProjects(response.data.slice(0, 3))
-      } catch (error) {
-        console.error('Error fetching projects:', error)
-      }
+  const fetchProjects = useCallback(async () => {
+    try {
+      const response = await axios.get(`${API_URL}projects/`)
+      setProjects(response.data)
+      setDisplayedProjects(prev => {
+        if (prev.length === 0 || JSON.stringify(prev) !== JSON.stringify(response.data.slice(0, 3))) {
+          return response.data.slice(0, 3)
+        }
+        return prev
+      })
+    } catch (error) {
+      console.error('Error fetching projects:', error)
     }
-    fetchProjects()
   }, [])
+
+  useEffect(() => {
+    fetchProjects()
+    const interval = setInterval(fetchProjects, REFRESH_INTERVAL)
+    return () => clearInterval(interval)
+  }, [fetchProjects])
 
   const categories = ['all', 'web', 'mobile', 'desktop']
   
@@ -142,22 +147,21 @@ const Projects = () => {
                         e.target.style.display = 'none';
                         e.target.parentElement.innerHTML = `
                           <div class="project-placeholder">
-<<<<<<< HEAD
-                            <span></span>
-=======
-                            <span>🚀</span>
->>>>>>> origin/main
+                            <img src="/images/icons/placeholder-project.svg" alt="Project" onerror="this.onerror=null;this.style.display='none'" />
                           </div>
                         `;
                       }}
                     />
                   ) : (
                     <div className="project-placeholder">
-<<<<<<< HEAD
-                      <span></span>
-=======
-                      <span>🚀</span>
->>>>>>> origin/main
+                      <img 
+                        src="/images/icons/placeholder-project.svg" 
+                        alt="Project"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.style.display = 'none';
+                        }}
+                      />
                     </div>
                   )}
                   <div className="project-overlay">
