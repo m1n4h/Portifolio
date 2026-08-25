@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import '../pages/Skills.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/';
+const API_URL = '/api/';
 
 const ExperienceManagement = () => {
   const [experiences, setExperiences] = useState([]);

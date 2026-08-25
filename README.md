@@ -132,3 +132,12 @@ Admin user created successfully!
 Username: admin
 Email: portfoliosalvier@gmail.com
 Default password: Admin@123
+
+
+All API endpoints work through the proxy. The API is now completely hidden from external access:
+
+Access Method	Status
+Direct http://127.0.0.1:8001/api/	✅ Works (local only)
+Direct http://localhost:8001/api/	✅ Works (local only)
+External IP http://<ip>:8001/api/	❌ Blocked (bound to 127.0.0.1)
+Via Vite proxy http://localhost:5173/api/	✅ Works (frontend)

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Settings.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/';
+const API_URL = '/api/';
 
 const Settings = () => {
   const [user, setUser] = useState(null);

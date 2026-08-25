@@ -27,7 +27,7 @@ ChartJS.register(
   LineElement
 );
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/';
+const API_URL = '/api/';
 
 const Analytics = () => {
   const [analyticsData, setAnalyticsData] = useState(null);

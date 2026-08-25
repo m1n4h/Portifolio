@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import axios from 'axios'
 import { useCursor } from '../contexts/CursorContext'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api/'
+const API_URL = '/api/'
 
 const COUNTRIES = [
   { code: 'TZ', name: 'Tanzania', dial: '+255', flag: '🇹🇿' },
