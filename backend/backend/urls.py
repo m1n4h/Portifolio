@@ -1,6 +1,7 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.http import JsonResponse
+from django.views.generic import TemplateView
 
 def api_root(request):
     return JsonResponse({
@@ -21,12 +22,16 @@ def api_root(request):
 urlpatterns = [
     # Root API endpoint
     path('', api_root, name='api-root'),
-    
+
     # Portfolio app URLs (includes both API and admin)
     path('', include('portfolio.urls')),
-    
+
     # Default Django admin
     path('admin/', admin.site.urls),
+
+    # Serve React frontend - catch-all for non-API routes
+    path('app/', TemplateView.as_view(template_name='index.html'), name='frontend'),
+    re_path(r'^app/(?:.*)/?$', TemplateView.as_view(template_name='index.html'), name='frontend-catchall'),
 ]
 
 # Update default admin site headers

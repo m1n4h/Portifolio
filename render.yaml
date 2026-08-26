@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: portfolio-backend
+    runtime: python
+    plan: free
+    buildCommand: ./build.sh
+    startCommand: gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DEBUG
+        value: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: localhost,127.0.0.1,*.onrender.com
+      - key: DB_ENGINE
+        value: postgres
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: portfolio-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: portfolio-db
+          property: port
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: portfolio-db
+          property: database
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: portfolio-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: portfolio-db
+          property: password
+
+databases:
+  - name: portfolio-db
+    plan: free
+    databaseName: portfolio_db

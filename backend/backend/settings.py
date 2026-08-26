@@ -43,6 +43,7 @@ CORS_ALLOW_METHODS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # This should be at the top
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,7 +57,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'frontend_dist'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,8 +80,8 @@ if os.environ.get('DB_ENGINE') == 'postgres':
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.environ.get('POSTGRES_DB', 'portfolio_db'),
-            'USER': os.environ.get('POSTGRES_USER', 'portfolio_user'),  # Changed from 'postgres'
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'portfoliomanagemnt145'),  # Changed from 'amygirly'
+            'USER': os.environ.get('POSTGRES_USER', 'portfolio_user'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'portfoliomanagemnt145'),
             'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
             'PORT': os.environ.get('POSTGRES_PORT', '5432'),
         }
@@ -128,8 +129,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'frontend_dist'),
+]
+
+# WhiteNoise configuration
+STORAGES = {
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -158,3 +169,12 @@ REST_FRAMEWORK = {
 # Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development
 DEFAULT_FROM_EMAIL = 'portfolio@aminakalonge.dev'
+
+# Security settings for production
+if not DEBUG:
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
