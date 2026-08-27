@@ -393,7 +393,10 @@ const About = () => {
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem' }}>{viewingCert.institution} — {viewingCert.country}</p>
               {viewingCert.certificate_url && (
                 viewingCert.certificate_url.endsWith('.pdf') ? (
-                  <iframe src={viewingCert.certificate_url} style={{ width: '100%', height: '60vh', border: 'none', borderRadius: '0.5rem' }} title="Certificate" />
+                  <div>
+                    <embed src={viewingCert.certificate_url} type="application/pdf" style={{ width: '100%', height: '60vh', border: 'none', borderRadius: '0.5rem' }} />
+                    <a href={viewingCert.certificate_url} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center', marginTop: '0.5rem', color: 'var(--accent)', fontSize: '0.85rem' }}>Open PDF in new tab</a>
+                  </div>
                 ) : (
                   <img src={viewingCert.certificate_url} alt="Certificate" style={{ width: '100%', borderRadius: '0.5rem' }} />
                 )

@@ -53,7 +53,9 @@ def serve_media(request, path=''):
         }
         content_type = content_types.get(ext, 'application/octet-stream')
         with open(file_path, 'rb') as f:
-            return HttpResponse(f.read(), content_type=content_type)
+            response = HttpResponse(f.read(), content_type=content_type)
+            response['X-Frame-Options'] = 'SAMEORIGIN'
+            return response
     return HttpResponse('Not found', status=404)
 
 urlpatterns = [
