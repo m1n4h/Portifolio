@@ -116,15 +116,6 @@ const About = () => {
             <motion.button
               className="btn-primary"
               whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-              onMouseEnter={() => { setCursorType('hover'); setCursorText('View Work →') }}
-              onMouseLeave={() => { setCursorType('default'); setCursorText('') }}
-              onClick={() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })}
-            >
-              Projects Completed
-            </motion.button>
-            <motion.button
-              className="btn-primary"
-              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
               onMouseEnter={() => { setCursorType('hover'); setCursorText('View Details →') }}
               onMouseLeave={() => { setCursorType('default'); setCursorText('') }}
               onClick={() => setShowExperienceModal(true)}
