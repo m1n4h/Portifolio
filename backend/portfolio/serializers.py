@@ -106,3 +106,17 @@ class ProfessionalQualificationSerializer(serializers.ModelSerializer):
         if obj.certificate:
             return obj.certificate.url
         return None
+
+    def validate_certificate(self, certificate):
+        if certificate:
+            filename = certificate.name.split('/')[-1]
+            existing = ProfessionalQualification.objects.filter(
+                certificate__icontains=filename
+            )
+            if self.instance:
+                existing = existing.exclude(pk=self.instance.pk)
+            if existing.exists():
+                raise serializers.ValidationError(
+                    f'A certificate with the name "{filename}" already exists. Please rename the file or use a different one.'
+                )
+        return certificate
