@@ -9,70 +9,79 @@ const ParticleBackground = () => {
       pointerEvents: 'none',
       zIndex: 1,
     }}>
-      {/* Gradient mesh blobs */}
       <div className="neo-blob neo-blob-1" />
       <div className="neo-blob neo-blob-2" />
       <div className="neo-blob neo-blob-3" />
       <div className="neo-blob neo-blob-4" />
       <div className="neo-blob neo-blob-5" />
-
-      {/* Radial glow center */}
       <div className="neo-radial-glow" />
-
-      {/* Grid overlay */}
       <div className="neo-grid-overlay" />
 
       <style>{`
         .neo-blob {
           position: absolute;
           border-radius: 50%;
-          filter: blur(60px);
           will-change: transform;
         }
 
         .neo-blob-1 {
-          width: 600px;
-          height: 600px;
-          top: -10%;
-          left: -5%;
-          background: radial-gradient(circle, rgba(26, 111, 181, 0.7) 0%, rgba(42, 157, 143, 0.4) 40%, transparent 70%);
-          animation: neoBlob1 20s ease-in-out infinite;
+          width: 70vw;
+          height: 70vw;
+          max-width: 800px;
+          max-height: 800px;
+          top: -20%;
+          left: -15%;
+          background: radial-gradient(circle, rgba(26, 111, 181, 0.55) 0%, rgba(42, 157, 143, 0.25) 45%, transparent 70%);
+          filter: blur(40px);
+          animation: neoBlob1 22s ease-in-out infinite;
         }
 
         .neo-blob-2 {
-          width: 500px;
-          height: 500px;
-          top: 15%;
-          right: 0%;
-          background: radial-gradient(circle, rgba(201, 168, 76, 0.6) 0%, rgba(26, 111, 181, 0.3) 40%, transparent 70%);
-          animation: neoBlob2 25s ease-in-out infinite;
+          width: 60vw;
+          height: 60vw;
+          max-width: 700px;
+          max-height: 700px;
+          top: 10%;
+          right: -10%;
+          background: radial-gradient(circle, rgba(201, 168, 76, 0.5) 0%, rgba(26, 111, 181, 0.2) 45%, transparent 70%);
+          filter: blur(35px);
+          animation: neoBlob2 28s ease-in-out infinite;
         }
 
         .neo-blob-3 {
-          width: 450px;
-          height: 450px;
-          bottom: -5%;
-          left: 25%;
-          background: radial-gradient(circle, rgba(42, 157, 143, 0.6) 0%, rgba(201, 168, 76, 0.3) 40%, transparent 70%);
-          animation: neoBlob3 22s ease-in-out infinite;
+          width: 50vw;
+          height: 50vw;
+          max-width: 600px;
+          max-height: 600px;
+          bottom: -15%;
+          left: 20%;
+          background: radial-gradient(circle, rgba(42, 157, 143, 0.5) 0%, rgba(201, 168, 76, 0.2) 45%, transparent 70%);
+          filter: blur(35px);
+          animation: neoBlob3 24s ease-in-out infinite;
         }
 
         .neo-blob-4 {
-          width: 350px;
-          height: 350px;
-          top: 45%;
-          left: 10%;
-          background: radial-gradient(circle, rgba(26, 111, 181, 0.5) 0%, transparent 60%);
-          animation: neoBlob4 18s ease-in-out infinite;
+          width: 35vw;
+          height: 35vw;
+          max-width: 400px;
+          max-height: 400px;
+          top: 50%;
+          left: 5%;
+          background: radial-gradient(circle, rgba(26, 111, 181, 0.45) 0%, transparent 65%);
+          filter: blur(30px);
+          animation: neoBlob4 20s ease-in-out infinite;
         }
 
         .neo-blob-5 {
-          width: 300px;
-          height: 300px;
-          top: 5%;
-          left: 40%;
-          background: radial-gradient(circle, rgba(201, 168, 76, 0.4) 0%, transparent 60%);
-          animation: neoBlob5 28s ease-in-out infinite;
+          width: 30vw;
+          height: 30vw;
+          max-width: 350px;
+          max-height: 350px;
+          top: 0%;
+          left: 35%;
+          background: radial-gradient(circle, rgba(201, 168, 76, 0.4) 0%, transparent 65%);
+          filter: blur(30px);
+          animation: neoBlob5 26s ease-in-out infinite;
         }
 
         .neo-radial-glow {
@@ -80,59 +89,59 @@ const ParticleBackground = () => {
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: 900px;
-          height: 900px;
-          background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 50%);
-          animation: neoRadialPulse 8s ease-in-out infinite;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(ellipse at center, rgba(255,255,255,0.07) 0%, transparent 55%);
+          animation: neoRadialPulse 10s ease-in-out infinite;
         }
 
         .neo-grid-overlay {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
           background-size: 80px 80px;
-          opacity: 0.6;
+          opacity: 0.5;
         }
 
         @keyframes neoBlob1 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          25% { transform: translate(80px, 60px) scale(1.1); }
-          50% { transform: translate(30px, 120px) scale(0.95); }
-          75% { transform: translate(-40px, 40px) scale(1.05); }
+          0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+          25% { transform: translate(10%, 8%) scale(1.1) rotate(5deg); }
+          50% { transform: translate(5%, 15%) scale(0.95) rotate(-3deg); }
+          75% { transform: translate(-5%, 5%) scale(1.05) rotate(2deg); }
         }
 
         @keyframes neoBlob2 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          25% { transform: translate(-100px, 50px) scale(1.15); }
-          50% { transform: translate(-60px, -80px) scale(0.9); }
-          75% { transform: translate(30px, -30px) scale(1.08); }
+          0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+          25% { transform: translate(-12%, 6%) scale(1.12) rotate(-4deg); }
+          50% { transform: translate(-8%, -10%) scale(0.92) rotate(3deg); }
+          75% { transform: translate(4%, -4%) scale(1.06) rotate(-2deg); }
         }
 
         @keyframes neoBlob3 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          25% { transform: translate(60px, -70px) scale(1.1); }
-          50% { transform: translate(-50px, -40px) scale(1.2); }
-          75% { transform: translate(80px, 20px) scale(0.95); }
+          0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+          25% { transform: translate(8%, -10%) scale(1.08) rotate(3deg); }
+          50% { transform: translate(-6%, -5%) scale(1.15) rotate(-4deg); }
+          75% { transform: translate(10%, 3%) scale(0.95) rotate(2deg); }
         }
 
         @keyframes neoBlob4 {
           0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(100px, -60px) scale(1.3); }
-          66% { transform: translate(-60px, 80px) scale(0.85); }
+          33% { transform: translate(15%, -8%) scale(1.25); }
+          66% { transform: translate(-8%, 12%) scale(0.85); }
         }
 
         @keyframes neoBlob5 {
           0%, 100% { transform: translate(0, 0) scale(1); }
-          25% { transform: translate(-80px, 100px) scale(1.15); }
-          50% { transform: translate(70px, 50px) scale(0.9); }
-          75% { transform: translate(20px, -80px) scale(1.1); }
+          25% { transform: translate(-10%, 12%) scale(1.15); }
+          50% { transform: translate(8%, 6%) scale(0.9); }
+          75% { transform: translate(3%, -10%) scale(1.1); }
         }
 
         @keyframes neoRadialPulse {
-          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-          50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.3; }
+          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+          50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.3; }
         }
       `}</style>
     </div>
