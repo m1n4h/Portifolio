@@ -3,19 +3,19 @@ import React from 'react'
 const SectionBackground = ({ variant = 'default' }) => {
   const colors = {
     default: {
-      blob1: 'rgba(26, 111, 181, 0.15)',
-      blob2: 'rgba(42, 157, 143, 0.12)',
-      blob3: 'rgba(201, 168, 76, 0.1)',
+      blob1: 'rgba(26, 111, 181, 0.25)',
+      blob2: 'rgba(42, 157, 143, 0.2)',
+      blob3: 'rgba(201, 168, 76, 0.18)',
     },
     warm: {
-      blob1: 'rgba(201, 168, 76, 0.15)',
-      blob2: 'rgba(26, 111, 181, 0.12)',
-      blob3: 'rgba(42, 157, 143, 0.1)',
+      blob1: 'rgba(201, 168, 76, 0.25)',
+      blob2: 'rgba(26, 111, 181, 0.2)',
+      blob3: 'rgba(42, 157, 143, 0.18)',
     },
     cool: {
-      blob1: 'rgba(42, 157, 143, 0.15)',
-      blob2: 'rgba(26, 111, 181, 0.12)',
-      blob3: 'rgba(201, 168, 76, 0.1)',
+      blob1: 'rgba(42, 157, 143, 0.25)',
+      blob2: 'rgba(26, 111, 181, 0.2)',
+      blob3: 'rgba(201, 168, 76, 0.18)',
     },
   }
 
@@ -36,8 +36,8 @@ const SectionBackground = ({ variant = 'default' }) => {
         top: '-10%',
         right: '-5%',
         borderRadius: '50%',
-        background: `radial-gradient(circle, ${c.blob1} 0%, transparent 70%)`,
-        filter: 'blur(60px)',
+        background: `radial-gradient(circle, ${c.blob1} 0%, transparent 65%)`,
+        filter: 'blur(50px)',
         animation: 'sectionBlob1 25s ease-in-out infinite',
       }} />
       <div style={{
@@ -47,8 +47,8 @@ const SectionBackground = ({ variant = 'default' }) => {
         bottom: '-10%',
         left: '-5%',
         borderRadius: '50%',
-        background: `radial-gradient(circle, ${c.blob2} 0%, transparent 70%)`,
-        filter: 'blur(60px)',
+        background: `radial-gradient(circle, ${c.blob2} 0%, transparent 65%)`,
+        filter: 'blur(50px)',
         animation: 'sectionBlob2 30s ease-in-out infinite',
       }} />
       <div style={{
@@ -58,8 +58,8 @@ const SectionBackground = ({ variant = 'default' }) => {
         top: '40%',
         left: '30%',
         borderRadius: '50%',
-        background: `radial-gradient(circle, ${c.blob3} 0%, transparent 70%)`,
-        filter: 'blur(50px)',
+        background: `radial-gradient(circle, ${c.blob3} 0%, transparent 65%)`,
+        filter: 'blur(40px)',
         animation: 'sectionBlob3 20s ease-in-out infinite',
       }} />
       <style>{`

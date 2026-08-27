@@ -26,53 +26,52 @@ const ParticleBackground = () => {
         .neo-blob {
           position: absolute;
           border-radius: 50%;
-          filter: blur(80px);
-          opacity: 0.4;
+          filter: blur(60px);
           will-change: transform;
         }
 
         .neo-blob-1 {
           width: 600px;
           height: 600px;
-          top: -15%;
-          left: -10%;
-          background: radial-gradient(circle, rgba(26, 111, 181, 0.6) 0%, rgba(42, 157, 143, 0.3) 50%, transparent 70%);
+          top: -10%;
+          left: -5%;
+          background: radial-gradient(circle, rgba(26, 111, 181, 0.7) 0%, rgba(42, 157, 143, 0.4) 40%, transparent 70%);
           animation: neoBlob1 20s ease-in-out infinite;
         }
 
         .neo-blob-2 {
           width: 500px;
           height: 500px;
-          top: 20%;
-          right: -5%;
-          background: radial-gradient(circle, rgba(201, 168, 76, 0.5) 0%, rgba(26, 111, 181, 0.2) 50%, transparent 70%);
+          top: 15%;
+          right: 0%;
+          background: radial-gradient(circle, rgba(201, 168, 76, 0.6) 0%, rgba(26, 111, 181, 0.3) 40%, transparent 70%);
           animation: neoBlob2 25s ease-in-out infinite;
         }
 
         .neo-blob-3 {
-          width: 400px;
-          height: 400px;
-          bottom: -10%;
-          left: 30%;
-          background: radial-gradient(circle, rgba(42, 157, 143, 0.5) 0%, rgba(201, 168, 76, 0.2) 50%, transparent 70%);
+          width: 450px;
+          height: 450px;
+          bottom: -5%;
+          left: 25%;
+          background: radial-gradient(circle, rgba(42, 157, 143, 0.6) 0%, rgba(201, 168, 76, 0.3) 40%, transparent 70%);
           animation: neoBlob3 22s ease-in-out infinite;
         }
 
         .neo-blob-4 {
           width: 350px;
           height: 350px;
-          top: 50%;
-          left: 15%;
-          background: radial-gradient(circle, rgba(26, 111, 181, 0.4) 0%, transparent 60%);
+          top: 45%;
+          left: 10%;
+          background: radial-gradient(circle, rgba(26, 111, 181, 0.5) 0%, transparent 60%);
           animation: neoBlob4 18s ease-in-out infinite;
         }
 
         .neo-blob-5 {
           width: 300px;
           height: 300px;
-          top: 10%;
-          left: 45%;
-          background: radial-gradient(circle, rgba(201, 168, 76, 0.3) 0%, transparent 60%);
+          top: 5%;
+          left: 40%;
+          background: radial-gradient(circle, rgba(201, 168, 76, 0.4) 0%, transparent 60%);
           animation: neoBlob5 28s ease-in-out infinite;
         }
 
@@ -81,9 +80,9 @@ const ParticleBackground = () => {
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: 800px;
-          height: 800px;
-          background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 60%);
+          width: 900px;
+          height: 900px;
+          background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 50%);
           animation: neoRadialPulse 8s ease-in-out infinite;
         }
 
@@ -91,14 +90,11 @@ const ParticleBackground = () => {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
           background-size: 80px 80px;
-          opacity: 0.5;
+          opacity: 0.6;
         }
-
-        [data-theme="dark"] .neo-blob { opacity: 0.35; }
-        [data-theme="dark"] .neo-grid-overlay { opacity: 0.3; }
 
         @keyframes neoBlob1 {
           0%, 100% { transform: translate(0, 0) scale(1); }
@@ -135,7 +131,7 @@ const ParticleBackground = () => {
         }
 
         @keyframes neoRadialPulse {
-          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
           50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.3; }
         }
       `}</style>

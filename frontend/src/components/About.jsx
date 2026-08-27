@@ -171,7 +171,6 @@ const About = () => {
                 whileHover={{ scale: 1.05 }}
               >
                 <div className="edu-center-inner">
-                  <span className="edu-center-icon">🎓</span>
                   <p>Bachelor of Science<br />Information Technology</p>
                   <span className="edu-center-badge">2024 - Ongoing</span>
                 </div>
