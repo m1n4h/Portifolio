@@ -50,23 +50,27 @@
       font-size: clamp(2.5rem, 5vw, 4rem);
       font-weight: 800;
       margin-bottom: 0.8rem;
-      background: linear-gradient(135deg, #ffffff 0%, #c9a84c 100%);
+      background: linear-gradient(135deg, #ffffff 0%, #c9a84c 50%, #e0c46e 100%);
+      background-size: 200% auto;
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent;
       line-height: 1.1;
+      animation: titleGradient 4s ease infinite;
     }
     .hero-subtitle {
       font-size: clamp(1rem, 2vw, 1.4rem);
-      color: rgba(255,255,255,0.9);
+      color: rgba(255,255,255,0.95);
       margin-bottom: 1.2rem;
       font-weight: 500;
       line-height: 1.4;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
     .hero-description {
       font-size: 1rem;
-      color: rgba(255,255,255,0.75);
+      color: rgba(255,255,255,0.85);
       line-height: 1.7;
       margin-bottom: 2rem;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
     }
     .hero-buttons {
       display: flex;
@@ -89,12 +93,13 @@
       position: absolute;
       width: 320px;
       height: 320px;
-      background: radial-gradient(circle, rgba(201,168,76,0.25) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(201,168,76,0.3) 0%, rgba(42,157,143,0.15) 50%, transparent 70%);
       border-radius: 50%;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       animation: glowPulse 4s ease-in-out infinite;
+      filter: blur(10px);
     }
     .hero-image-ring {
       position: absolute;
@@ -146,8 +151,15 @@
       font-size: 0.8rem;
       font-weight: 700;
       color: #1a6fb5;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15), 0 0 20px rgba(201,168,76,0.1);
       z-index: 2;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2), 0 0 30px rgba(201,168,76,0.2);
+      }
+      
       &.hero-badge-1 { top: 30px; right: -10px; background: linear-gradient(135deg, #c9a84c, #e0c46e); color: white; }
       &.hero-badge-2 { bottom: 40px; left: -15px; }
     }
@@ -160,8 +172,9 @@
     .floating-shape {
       position: absolute;
       border-radius: 50%;
-      opacity: 0.08;
+      opacity: var(--particle-opacity, 0.08);
       animation: float 8s ease-in-out infinite;
+      filter: blur(1px);
       &.shape-1 { width: 400px; height: 400px; top: 10%; left: 5%; background: radial-gradient(circle, #c9a84c 0%, transparent 70%); animation-duration: 10s; }
       &.shape-2 { width: 300px; height: 300px; top: 50%; right: 5%; background: radial-gradient(circle, #2a9d8f 0%, transparent 70%); animation-duration: 8s; animation-delay: 2s; }
       &.shape-3 { width: 200px; height: 200px; bottom: 15%; left: 15%; background: radial-gradient(circle, #ffffff 0%, transparent 70%); animation-duration: 12s; animation-delay: 4s; }
@@ -171,7 +184,11 @@
 }
 
 [data-theme="dark"] .hero {
-  background: linear-gradient(135deg, #081525 0%, #0d3558 40%, #1a4a42 100%);
+  background: linear-gradient(135deg, #050d1a 0%, #0a1f3a 40%, #0d2e28 100%);
+}
+
+[data-theme="dark"] .hero .hero-badge {
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 20px rgba(201,168,76,0.15);
 }
 
 @keyframes float {
@@ -190,6 +207,12 @@
 @keyframes morphRing2 {
   0%,100% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
   50% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+}
+
+@keyframes titleGradient {
+  0% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+  100% { background-position: 0% center; }
 }
 
 @media (max-width: 900px) {

@@ -78,13 +78,45 @@
       border: 2px solid var(--border);
       border-radius: 1.5rem;
       overflow: hidden;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--gradient);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 5;
+      }
       
       &:hover {
-        box-shadow: 0 20px 40px var(--shadow-lg);
-        transform: translateY(-5px);
-        border-color: var(--accent);
+        box-shadow: 0 25px 60px var(--shadow-lg), 0 0 0 1px var(--border);
+        transform: translateY(-10px);
+        border-color: transparent;
+        
+        &::after {
+          transform: scaleX(1);
+        }
+        
+        .project-image img {
+          transform: scale(1.08);
+        }
+        
+        .project-overlay {
+          opacity: 1;
+          visibility: visible;
+        }
+        
+        .project-image::after {
+          opacity: 1;
+        }
       }
       
       .project-image {
@@ -93,11 +125,25 @@
         overflow: hidden;
         background: var(--bg-secondary);
         
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 60%;
+          background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 100%);
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.4s ease;
+          z-index: 1;
+        }
+        
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 0.3s ease;
+          transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .project-placeholder {

@@ -1,21 +1,23 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useCursor } from '../contexts/CursorContext'
+import ParticleBackground from './ParticleBackground'
 
 const Hero = () => {
   const { setCursorType, setCursorText } = useCursor()
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
+    visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.1 } }
   }
   const itemVariants = {
     hidden: { y: 50, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } }
+    visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } }
   }
 
   return (
     <section id="hero" className="hero">
+      <ParticleBackground count={40} />
       <div className="hero-inner container">
         {/* Left - Text */}
         <motion.div

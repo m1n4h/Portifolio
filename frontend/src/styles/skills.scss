@@ -1,6 +1,17 @@
 .skills {
-  background: var(--bg-primary);
+  background: var(--section-gradient);
   padding: 80px 0;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
   
   .container {
     max-width: 1200px;
@@ -30,22 +41,40 @@
       color: var(--text-secondary);
       border-radius: 3rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       font-weight: 500;
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 0%;
+        background: var(--gradient);
+        transition: height 0.4s ease;
+        z-index: -1;
+      }
       
       &:hover {
         border-color: var(--accent);
-        color: var(--accent);
-        transform: translateY(-2px);
-        background-color: rgba(26, 111, 181, 0.08);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px var(--shadow);
+        
+        &::before {
+          height: 100%;
+        }
       }
       
       &.active {
         background: var(--gradient);
         border-color: transparent;
         color: white;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px var(--shadow);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px var(--shadow-lg);
       }
     }
   }
@@ -72,15 +101,32 @@
       border-radius: 1rem;
       padding: 1.5rem;
       text-align: center;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
       cursor: default;
       
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--gradient);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s ease;
+      }
+      
       &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px var(--shadow);
-        border-color: var(--accent);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 45px var(--shadow-lg), 0 0 0 1px var(--border);
+        border-color: transparent;
+        
+        &::after {
+          transform: scaleX(1);
+        }
       }
       
       .skill-icon-wrapper {
@@ -208,14 +254,31 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 1rem;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 0%;
+        background: var(--gradient);
+        transition: height 0.4s ease;
+        z-index: -1;
+      }
       
       &:hover {
-        background: var(--gradient);
         color: white;
         border-color: transparent;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px var(--shadow);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px var(--shadow-lg);
+        
+        &::before {
+          height: 100%;
+        }
       }
     }
   }

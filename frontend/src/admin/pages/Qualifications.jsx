@@ -65,7 +65,7 @@ const Qualifications = () => {
         || Object.values(error.response?.data || {}).flat().join(', ')
         || 'Error saving qualification';
       setError(msg);
-      setTimeout(() => setError(null), 3000);
+      setTimeout(() => setError(null), 5000);
     }
   };
 
