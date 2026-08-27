@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import axios from 'axios'
 import { useCursor } from '../contexts/CursorContext'
+import SectionBackground from './SectionBackground'
 
 const API_URL = '/api/'
 
@@ -179,7 +180,8 @@ const Contact = () => {
 
   return (
     <section id="contact" className="contact" ref={ref}>
-      <div className="container">
+      <SectionBackground variant="cool" />
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <motion.h2 className="section-title"
           initial={{ opacity: 0, y: 50 }} animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }} transition={{ duration: 0.6 }}>
           Get In Touch

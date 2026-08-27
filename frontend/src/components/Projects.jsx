@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
 import axios from 'axios'
+import SectionBackground from './SectionBackground'
 import { useCursor } from '../contexts/CursorContext'
 
 const API_URL = '/api/'
@@ -123,7 +124,8 @@ const Projects = () => {
 
   return (
     <section id="projects" className="projects" ref={ref}>
-      <div className="container">
+      <SectionBackground variant="warm" />
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <motion.h2
           className="section-title"
           initial={{ opacity: 0, y: 50 }}

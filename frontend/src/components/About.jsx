@@ -3,6 +3,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useRef } from 'react'
 import axios from 'axios'
 import { useCursor } from '../contexts/CursorContext'
+import SectionBackground from './SectionBackground'
 
 const API_URL = '/api/'
 
@@ -89,7 +90,8 @@ const About = () => {
 
   return (
     <section id="about" className="about" ref={ref}>
-      <div className="container">
+      <SectionBackground variant="default" />
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <motion.div
           className="about-content"
           variants={containerVariants}

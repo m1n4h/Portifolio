@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
 import axios from 'axios'
+import SectionBackground from './SectionBackground'
 
 const API_URL = '/api/'
 const REFRESH_INTERVAL = 30000
@@ -96,7 +97,8 @@ const Skills = () => {
 
   return (
     <section id="skills" className="skills" ref={ref}>
-      <div className="container">
+      <SectionBackground variant="cool" />
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <motion.h2
           className="section-title"
           initial={{ opacity: 0, y: 50 }}
