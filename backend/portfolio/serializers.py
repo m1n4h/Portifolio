@@ -104,8 +104,5 @@ class ProfessionalQualificationSerializer(serializers.ModelSerializer):
 
     def get_certificate_url(self, obj):
         if obj.certificate:
-            request = self.context.get('request')
-            if request:
-                return request.build_absolute_uri(obj.certificate.url)
             return obj.certificate.url
         return None
