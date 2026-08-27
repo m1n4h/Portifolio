@@ -143,7 +143,7 @@ const Skills = () => {
                   custom={index}
                   variants={cardVariants}
                   initial="hidden"
-                  animate="visible"
+                  animate={isInView ? "visible" : "hidden"}
                   exit="exit"
                   layout
                   whileHover={{
@@ -155,14 +155,6 @@ const Skills = () => {
                     transition: { type: 'spring', stiffness: 300, damping: 20 },
                   }}
                   whileTap={{ scale: 0.97 }}
-                  animate={isInView ? {
-                    opacity: 1,
-                    y: 0,
-                    ...(index % 2 === 0 ? {} : { y: [0, -6, 0] }),
-                  } : {}}
-                  transition={index % 2 === 0 ? {} : {
-                    y: { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: index * 0.3 },
-                  }}
                   style={{ perspective: '1000px', transformStyle: 'preserve-3d' }}
                 >
                   <div className="skill-icon-wrapper">
