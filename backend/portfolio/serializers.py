@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, ContactMessage, Skill, UserActivity, EmailLog, SystemLog, Experience, Client, Education
+from .models import Project, ContactMessage, Skill, UserActivity, EmailLog, SystemLog, Experience, Client, Education, ProfessionalQualification
 
 class ProjectSerializer(serializers.ModelSerializer):
     technologies_list = serializers.SerializerMethodField()
@@ -90,3 +90,19 @@ class EducationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Education
         fields = '__all__'
+
+
+class ProfessionalQualificationSerializer(serializers.ModelSerializer):
+    certificate_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ProfessionalQualification
+        fields = '__all__'
+
+    def get_certificate_url(self, obj):
+        if obj.certificate:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.certificate.url)
+            return obj.certificate.url
+        return None

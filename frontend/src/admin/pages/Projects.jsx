@@ -125,14 +125,14 @@ const Projects = () => {
           formData,
           { headers: { Authorization: `Token ${token}` } }
         );
-        setSuccess('✅ Project updated successfully!');
+        setSuccess('Project updated successfully!');
       } else {
         response = await axios.post(
           `${API_URL}projects/`,
           formData,
           { headers: { Authorization: `Token ${token}` } }
         );
-        setSuccess('✅ Project added successfully!');
+        setSuccess('Project added successfully!');
       }
 
       // Reset form

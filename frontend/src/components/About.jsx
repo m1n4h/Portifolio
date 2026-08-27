@@ -13,12 +13,16 @@ const About = () => {
 
   const [showExperienceModal, setShowExperienceModal] = useState(false)
   const [showClientsModal, setShowClientsModal] = useState(false)
+  const [showQualificationsModal, setShowQualificationsModal] = useState(false)
   const [clients, setClients] = useState([])
   const [education, setEducation] = useState([])
   const [experiences, setExperiences] = useState([])
+  const [qualifications, setQualifications] = useState([])
   const [loadingClients, setLoadingClients] = useState(false)
   const [loadingEducation, setLoadingEducation] = useState(false)
   const [loadingExperiences, setLoadingExperiences] = useState(false)
+  const [loadingQualifications, setLoadingQualifications] = useState(false)
+  const [viewingCert, setViewingCert] = useState(null)
 
   useEffect(() => {
     if (showClientsModal && clients.length === 0) {
@@ -45,6 +49,16 @@ const About = () => {
       .catch(err => console.error('Failed to fetch experiences:', err))
       .finally(() => setLoadingExperiences(false))
   }, [])
+
+  useEffect(() => {
+    if (showQualificationsModal && qualifications.length === 0) {
+      setLoadingQualifications(true)
+      axios.get(`${API_URL}qualifications/`)
+        .then(res => setQualifications(res.data))
+        .catch(err => console.error('Failed to fetch qualifications:', err))
+        .finally(() => setLoadingQualifications(false))
+    }
+  }, [showQualificationsModal])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -116,6 +130,15 @@ const About = () => {
               onClick={() => setShowExperienceModal(true)}
             >
               Years of Experience
+            </motion.button>
+            <motion.button
+              className="btn-primary"
+              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+              onMouseEnter={() => { setCursorType('hover'); setCursorText('View Certs →') }}
+              onMouseLeave={() => { setCursorType('default'); setCursorText('') }}
+              onClick={() => setShowQualificationsModal(true)}
+            >
+              Professional Qualifications
             </motion.button>
             <motion.button
               className="btn-primary"
@@ -207,7 +230,7 @@ const About = () => {
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }}
                 onClick={() => setShowExperienceModal(false)}
-                style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--text-primary)', fontSize: '1.2rem' }}
+                style={{ position: 'absolute', top: '1rem', right: '1rem', background: '#e94560', border: '2px solid #fff', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff', fontSize: '1.2rem', fontWeight: 'bold', boxShadow: '0 4px 15px rgba(233, 69, 96, 0.5)', zIndex: 10 }}
               >×</motion.button>
 
               <h3 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>2 Years of Experience</h3>
@@ -223,7 +246,6 @@ const About = () => {
                       initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + index * 0.1 }}
                       style={{ display: 'flex', gap: '1rem', padding: '1.25rem', background: 'var(--bg-secondary)', borderRadius: '1rem', border: '1px solid var(--border)', alignItems: 'flex-start' }}
                     >
-                      <span style={{ fontSize: '2rem', lineHeight: 1, flexShrink: 0 }}>{item.icon || '💼'}</span>
                       <div>
                         <h4 style={{ fontSize: '1rem', color: 'var(--secondary)', marginBottom: '0.25rem', fontWeight: '700' }}>{item.title}</h4>
                         <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5', margin: 0 }}>{item.description}</p>
@@ -256,7 +278,7 @@ const About = () => {
               <motion.button
                 whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }}
                 onClick={() => setShowClientsModal(false)}
-                style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--text-primary)', fontSize: '1.2rem' }}
+                style={{ position: 'absolute', top: '1rem', right: '1rem', background: '#e94560', border: '2px solid #fff', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff', fontSize: '1.2rem', fontWeight: 'bold', boxShadow: '0 4px 15px rgba(233, 69, 96, 0.5)', zIndex: 10 }}
               >×</motion.button>
               <h3 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Happy Clients</h3>
               <p style={{ color: 'var(--accent)', fontWeight: '600', marginBottom: '1.5rem', fontSize: '0.95rem' }}>What people say about working with me</p>
@@ -284,6 +306,106 @@ const About = () => {
                 </div>
               ) : (
                 <p style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '2rem 0' }}>No testimonials available yet.</p>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Professional Qualifications Modal */}
+      <AnimatePresence>
+        {showQualificationsModal && (
+          <motion.div
+            variants={overlayVariants} initial="hidden" animate="visible" exit="exit"
+            onClick={() => { setShowQualificationsModal(false); setViewingCert(null); }}
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}
+          >
+            <motion.div
+              variants={modalVariants} initial="hidden" animate="visible" exit="exit"
+              onClick={(e) => e.stopPropagation()}
+              style={{ background: 'var(--bg-primary)', borderRadius: '1.5rem', border: '1px solid var(--border)', padding: '2.5rem', maxWidth: '650px', width: '100%', maxHeight: '85vh', overflowY: 'auto', position: 'relative', boxShadow: '0 25px 50px var(--shadow-lg)' }}
+            >
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }}
+                onClick={() => { setShowQualificationsModal(false); setViewingCert(null); }}
+                style={{ position: 'absolute', top: '1rem', right: '1rem', background: '#e94560', border: '2px solid #fff', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff', fontSize: '1.2rem', fontWeight: 'bold', boxShadow: '0 4px 15px rgba(233, 69, 96, 0.5)', zIndex: 10 }}
+              >×</motion.button>
+
+              <h3 style={{ fontSize: '1.5rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Professional Qualifications</h3>
+              <p style={{ color: 'var(--accent)', fontWeight: '600', marginBottom: '1.5rem', fontSize: '0.95rem' }}>Certifications and professional training</p>
+
+              {loadingQualifications ? (
+                <p style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '2rem 0' }}>Loading...</p>
+              ) : qualifications.length > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {qualifications.map((item, index) => (
+                    <motion.div
+                      key={item.id || index}
+                      initial={{ opacity: 0, y: 40, rotateX: 15, scale: 0.9 }}
+                      animate={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+                      transition={{ type: 'spring', damping: 15, stiffness: 100, delay: index * 0.12 }}
+                      whileHover={{ scale: 1.03, y: -4, boxShadow: '0 12px 30px rgba(0,0,0,0.2)' }}
+                      style={{ padding: '1.25rem', background: 'var(--bg-secondary)', borderRadius: '1rem', border: '1px solid var(--border)', cursor: 'default', perspective: '800px' }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                        <div style={{ flex: 1 }}>
+                          <h4 style={{ fontSize: '1rem', color: 'var(--secondary)', marginBottom: '0.25rem', fontWeight: '700' }}>{item.course}</h4>
+                          <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: '0.15rem 0' }}><strong>Institution:</strong> {item.institution}</p>
+                          <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: '0.15rem 0' }}><strong>Country:</strong> {item.country}</p>
+                          <p style={{ color: 'var(--accent)', fontWeight: '600', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                            {item.mode_of_learning} · {item.start_date} — {item.end_date || 'Ongoing'}
+                          </p>
+                          {item.issuer && <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', margin: '0.15rem 0' }}><strong>Issuer:</strong> {item.issuer}</p>}
+                        </div>
+                        {item.certificate_url && (
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => setViewingCert(item)}
+                            style={{ flexShrink: 0, marginLeft: '1rem', padding: '0.5rem 1rem', background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: '600', fontSize: '0.85rem' }}
+                          >
+                            View
+                          </motion.button>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <p style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '1rem 0' }}>No qualifications added yet.</p>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Certificate Viewer Modal */}
+      <AnimatePresence>
+        {viewingCert && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onClick={() => setViewingCert(null)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000, padding: '2rem' }}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: 'spring', damping: 20 }}
+              onClick={e => e.stopPropagation()}
+              style={{ background: 'var(--bg-primary)', borderRadius: '1rem', padding: '1.5rem', maxWidth: '700px', width: '100%', position: 'relative', maxHeight: '85vh', overflow: 'auto' }}
+            >
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }}
+                onClick={() => setViewingCert(null)}
+                style={{ position: 'absolute', top: '0.75rem', right: '0.75rem', background: '#e94560', border: '2px solid #fff', borderRadius: '50%', width: '36px', height: '36px', color: '#fff', fontSize: '1rem', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10 }}
+              >✕</motion.button>
+              <h3 style={{ marginBottom: '1rem', color: 'var(--text-primary)' }}>{viewingCert.course}</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem' }}>{viewingCert.institution} — {viewingCert.country}</p>
+              {viewingCert.certificate_url && (
+                viewingCert.certificate_url.endsWith('.pdf') ? (
+                  <iframe src={viewingCert.certificate_url} style={{ width: '100%', height: '60vh', border: 'none', borderRadius: '0.5rem' }} title="Certificate" />
+                ) : (
+                  <img src={viewingCert.certificate_url} alt="Certificate" style={{ width: '100%', borderRadius: '0.5rem' }} />
+                )
               )}
             </motion.div>
           </motion.div>

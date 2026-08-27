@@ -27,6 +27,7 @@ import Settings from './admin/pages/Settings';
 import ExperienceManagement from './admin/pages/Experience';
 import ClientsManagement from './admin/pages/Clients';
 import EducationManagement from './admin/pages/Education';
+import QualificationsManagement from './admin/pages/Qualifications';
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -88,6 +89,7 @@ function App() {
           <Route path="experience" element={<ExperienceManagement />} />
           <Route path="clients" element={<ClientsManagement />} />
           <Route path="education" element={<EducationManagement />} />
+          <Route path="qualifications" element={<QualificationsManagement />} />
           <Route path="settings" element={<Settings />} />
         </Route>
 

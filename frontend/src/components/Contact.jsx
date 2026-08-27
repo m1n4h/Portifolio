@@ -37,6 +37,8 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', country_code: 'TZ', subject: '', message: ''
   })
+  const [errors, setErrors] = useState({})
+  const [touched, setTouched] = useState({})
   const [phoneError, setPhoneError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState('')
@@ -45,25 +47,78 @@ const Contact = () => {
   const isInView = useInView(ref, { once: true, threshold: 0.3 })
   const { setCursorType, setCursorText } = useCursor()
 
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'name':
+        if (!value.trim()) return 'Name is required'
+        if (value.trim().length < 2) return 'Name must be at least 2 characters'
+        return ''
+      case 'email':
+        if (!value.trim()) return 'Email is required'
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Please enter a valid email'
+        return ''
+      case 'phone':
+        if (!value) return '' // phone is optional
+        const digits = value.replace(/\D/g, '')
+        if (digits.length < 7) return 'Phone number is too short'
+        if (digits.length > 15) return 'Phone number is too long'
+        return ''
+      case 'subject':
+        if (!value.trim()) return 'Subject is required'
+        if (value.trim().length < 3) return 'Subject must be at least 3 characters'
+        return ''
+      case 'message':
+        if (!value.trim()) return 'Message is required'
+        if (value.trim().length < 10) return 'Message must be at least 10 characters'
+        return ''
+      default:
+        return ''
+    }
+  }
+
+  const validateAll = () => {
+    const newErrors = {}
+    let isValid = true
+    ;['name', 'email', 'subject', 'message'].forEach(field => {
+      const error = validateField(field, formData[field])
+      if (error) {
+        newErrors[field] = error
+        isValid = false
+      }
+    })
+    return { isValid, errors: newErrors }
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
+    if (touched[name]) {
+      const error = validateField(name, value)
+      setErrors(prev => ({ ...prev, [name]: error }))
+    }
     if (name === 'phone' || name === 'country_code') setPhoneError('')
   }
 
-  const validatePhone = (phone, countryCode) => {
-    if (!phone) return true // phone is optional
-    const digits = phone.replace(/\D/g, '')
-    if (digits.length < 7) return 'Phone number is too short'
-    if (digits.length > 15) return 'Phone number is too long'
-    if (!/^[0-9+\-\s()]+$/.test(phone)) return 'Phone contains invalid characters'
-    return ''
+  const handleBlur = (e) => {
+    const { name, value } = e.target
+    setTouched(prev => ({ ...prev, [name]: true }))
+    const error = validateField(name, value)
+    setErrors(prev => ({ ...prev, [name]: error }))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const err = validatePhone(formData.phone, formData.country_code)
-    if (err) { setPhoneError(err); return }
+    
+    // Validate all fields
+    const { isValid, errors: validationErrors } = validateAll()
+    
+    // Mark all fields as touched
+    setTouched({ name: true, email: true, phone: true, subject: true, message: true })
+    
+    if (!isValid) {
+      setErrors(validationErrors)
+      return
+    }
 
     setIsSubmitting(true)
     setSubmitStatus('')
@@ -71,7 +126,6 @@ const Contact = () => {
 
     try {
       const payload = { ...formData }
-      // If phone doesn't start with +, prepend country dial code
       if (payload.phone && !payload.phone.startsWith('+')) {
         const country = COUNTRIES.find(c => c.code === payload.country_code)
         if (country) {
@@ -85,6 +139,8 @@ const Contact = () => {
       setSubmitStatus('success')
       setSubmitMessage('Message sent successfully! You will be notified on your phone when I reply.')
       setFormData({ name: '', email: '', phone: '', country_code: 'TZ', subject: '', message: '' })
+      setErrors({})
+      setTouched({})
     } catch (error) {
       if (error.response?.data) {
         const data = error.response.data
@@ -114,6 +170,12 @@ const Contact = () => {
   ]
   const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.2 } } }
   const itemVariants = { hidden: { y: 30, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: "easeOut" } } }
+
+  const getFieldClass = (fieldName) => {
+    if (errors[fieldName] && touched[fieldName]) return 'input-error'
+    if (!errors[fieldName] && touched[fieldName] && formData[fieldName]) return 'input-valid'
+    return ''
+  }
 
   return (
     <section id="contact" className="contact" ref={ref}>
@@ -157,10 +219,28 @@ const Contact = () => {
             <form className="contact-form" onSubmit={handleSubmit} noValidate>
               <div className="form-row">
                 <div className="form-group">
-                  <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Your Name" required />
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    placeholder="Your Name *"
+                    className={getFieldClass('name')}
+                  />
+                  {errors.name && touched.name && <span className="field-error">{errors.name}</span>}
                 </div>
                 <div className="form-group">
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Your Email" required />
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    placeholder="Your Email *"
+                    className={getFieldClass('email')}
+                  />
+                  {errors.email && touched.email && <span className="field-error">{errors.email}</span>}
                 </div>
               </div>
 
@@ -172,24 +252,54 @@ const Contact = () => {
                         <option key={c.code} value={c.code}>{c.flag} {c.dial} {c.name}</option>
                       ))}
                     </select>
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange}
-                      placeholder="Phone Number" className={phoneError ? 'input-error' : ''} />
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      placeholder="Phone Number"
+                      className={phoneError ? 'input-error' : ''}
+                    />
                   </div>
                   {phoneError && <span className="field-error">{phoneError}</span>}
                   <span className="field-hint">Select your country, then enter your number. You'll receive my reply via SMS.</span>
                 </div>
                 <div className="form-group">
-                  <input type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Subject" required />
+                  <input
+                    type="text"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    placeholder="Subject *"
+                    className={getFieldClass('subject')}
+                  />
+                  {errors.subject && touched.subject && <span className="field-error">{errors.subject}</span>}
                 </div>
               </div>
 
               <div className="form-group full-width">
-                <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Your Message" rows="6" required></textarea>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="Your Message *"
+                  rows="6"
+                  className={getFieldClass('message')}
+                ></textarea>
+                {errors.message && touched.message && <span className="field-error">{errors.message}</span>}
               </div>
 
               <div className="form-actions">
-                <motion.button type="submit" className={`submit-btn ${isSubmitting ? 'submitting' : ''}`} disabled={isSubmitting}
-                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <motion.button
+                  type="submit"
+                  className={`submit-btn ${isSubmitting ? 'submitting' : ''}`}
+                  disabled={isSubmitting}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
                 </motion.button>
               </div>
@@ -208,6 +318,29 @@ const Contact = () => {
           </motion.div>
         </div>
       </div>
+
+      <style>{`
+        .field-error {
+          display: block;
+          color: #e94560;
+          font-size: 0.75rem;
+          margin-top: 4px;
+          animation: shakeError 0.3s ease;
+        }
+        .input-error {
+          border-color: #e94560 !important;
+          box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2) !important;
+        }
+        .input-valid {
+          border-color: #27ae60 !important;
+          box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.2) !important;
+        }
+        @keyframes shakeError {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-4px); }
+          75% { transform: translateX(4px); }
+        }
+      `}</style>
     </section>
   )
 }

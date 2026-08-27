@@ -2,7 +2,8 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     AuthViewSet, ProjectViewSet, SkillViewSet, ContactMessageViewSet,
-    AdminDashboardViewSet, UserActivityViewSet, ExperienceViewSet, ClientViewSet, EducationViewSet
+    AdminDashboardViewSet, UserActivityViewSet, ExperienceViewSet, ClientViewSet, EducationViewSet,
+    ProfessionalQualificationViewSet
 )
 
 # API Router
@@ -16,6 +17,7 @@ router.register(r'auth', AuthViewSet, basename='auth')
 router.register(r'experience', ExperienceViewSet, basename='experience')
 router.register(r'clients', ClientViewSet, basename='client')
 router.register(r'education', EducationViewSet, basename='education')
+router.register(r'qualifications', ProfessionalQualificationViewSet, basename='qualification')
 
 urlpatterns = [
     # API Endpoints

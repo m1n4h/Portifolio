@@ -18,4 +18,7 @@ cd ..
 rm -rf backend/frontend_dist
 cp -r frontend/dist backend/frontend_dist
 
+# Create media directory for uploads
+mkdir -p backend/media
+
 echo "Build complete!"

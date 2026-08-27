@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
 import axios from 'axios'
@@ -37,9 +37,9 @@ const Skills = () => {
   }, [fetchSkills])
 
   const categories = ['all', 'frontend', 'backend', 'mobile', 'database', 'tools', 'design', 'devops']
-  
-  const filteredSkills = activeCategory === 'all' 
-    ? skills 
+
+  const filteredSkills = activeCategory === 'all'
+    ? skills
     : skills.filter(skill => skill.category === activeCategory)
 
   const handleShowMore = () => {
@@ -54,36 +54,50 @@ const Skills = () => {
   const handleCategoryFilter = (category) => {
     setActiveCategory(category)
     setShowAll(false)
-    const filtered = category === 'all' ? skills : skills.filter(skill => skill.category === activeCategory)
+    const filtered = category === 'all' ? skills : skills.filter(skill => skill.category === category)
     setDisplayedSkills(filtered.slice(0, 3))
   }
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
+  const cardVariants = {
+    hidden: (i) => ({
+      opacity: 0,
+      y: 60,
+      rotateX: 15,
+      scale: 0.85,
+    }),
+    visible: (i) => ({
       opacity: 1,
+      y: 0,
+      rotateX: 0,
+      scale: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        type: 'spring',
+        damping: 15,
+        stiffness: 100,
+        delay: i * 0.1,
+      },
+    }),
+    exit: {
+      opacity: 0,
+      scale: 0.8,
+      y: -30,
+      transition: { duration: 0.3 },
+    },
   }
 
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+  const floatAnimation = {
+    y: [-4, 4, -4],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: 'easeInOut',
+    },
   }
 
   return (
     <section id="skills" className="skills" ref={ref}>
       <div className="container">
-        <motion.h2 
+        <motion.h2
           className="section-title"
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
@@ -93,92 +107,145 @@ const Skills = () => {
         </motion.h2>
 
         {/* Category Filter */}
-        <motion.div 
+        <motion.div
           className="skills-filter"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           {categories.map(category => (
-            <button
+            <motion.button
               key={category}
               className={`filter-btn ${activeCategory === category ? 'active' : ''}`}
               onClick={() => handleCategoryFilter(category)}
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              layout
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
-            </button>
+            </motion.button>
           ))}
         </motion.div>
 
         {/* Skills Grid */}
-        <motion.div 
+        <motion.div
           className="skills-grid"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
+          layout
         >
-          {displayedSkills.length > 0 ? (
-            displayedSkills.map(skill => (
-              <motion.div
-                key={skill.id}
-                className="skill-card"
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <div className="skill-icon-wrapper">
-                  <div className="skill-orbit-ring" />
-                  <div className="skill-icon">
-                    {skill.image_url ? (
-                      <img 
-                        src={skill.image_url} 
-                        alt={skill.name} 
-                        className="skill-image"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.style.display = 'none';
-                          const fallback = document.createElement('span');
-                          fallback.textContent = skill.icon || '💻';
-                          e.target.parentElement.appendChild(fallback);
-                        }}
-                      />
-                    ) : (
-                      <span>{skill.icon || '💻'}</span>
-                    )}
+          <AnimatePresence mode="popLayout">
+            {displayedSkills.length > 0 ? (
+              displayedSkills.map((skill, index) => (
+                <motion.div
+                  key={skill.id}
+                  className="skill-card"
+                  custom={index}
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  layout
+                  whileHover={{
+                    scale: 1.08,
+                    rotateY: 5,
+                    rotateX: -5,
+                    y: -12,
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+                    transition: { type: 'spring', stiffness: 300, damping: 20 },
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                  animate={isInView ? {
+                    opacity: 1,
+                    y: 0,
+                    ...(index % 2 === 0 ? {} : { y: [0, -6, 0] }),
+                  } : {}}
+                  transition={index % 2 === 0 ? {} : {
+                    y: { duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: index * 0.3 },
+                  }}
+                  style={{ perspective: '1000px', transformStyle: 'preserve-3d' }}
+                >
+                  <div className="skill-icon-wrapper">
+                    <div className="skill-orbit-ring" />
+                    <motion.div
+                      className="skill-icon"
+                      animate={{ rotate: [0, 5, -5, 0] }}
+                      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                    >
+                      {skill.image_url ? (
+                        <img
+                          src={skill.image_url}
+                          alt={skill.name}
+                          className="skill-image"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.style.display = 'none';
+                            const fallback = document.createElement('span');
+                            fallback.textContent = skill.icon || '💻';
+                            e.target.parentElement.appendChild(fallback);
+                          }}
+                        />
+                      ) : (
+                        <span>{skill.icon || '💻'}</span>
+                      )}
+                    </motion.div>
                   </div>
-                </div>
-                <h3 className="skill-name">{skill.name}</h3>
-                <div className="skill-progress">
-                  <div 
-                    className="skill-progress-bar"
-                    style={{ width: `${skill.proficiency}%` }}
-                  ></div>
-                </div>
-                <span className="skill-percentage">{skill.proficiency}%</span>
-                {skill.description && (
-                  <p className="skill-description">{skill.description}</p>
-                )}
-              </motion.div>
-            ))
-          ) : (
-            <p className="no-skills">No skills found in this category.</p>
-          )}
+                  <motion.h3
+                    className="skill-name"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    {skill.name}
+                  </motion.h3>
+                  <div className="skill-progress">
+                    <motion.div
+                      className="skill-progress-bar"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${skill.proficiency}%` }}
+                      transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
+                    />
+                  </div>
+                  <motion.span
+                    className="skill-percentage"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.7, type: 'spring' }}
+                  >
+                    {skill.proficiency}%
+                  </motion.span>
+                  {skill.description && (
+                    <p className="skill-description">{skill.description}</p>
+                  )}
+                </motion.div>
+              ))
+            ) : (
+              <motion.p
+                className="no-skills"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                No skills found in this category.
+              </motion.p>
+            )}
+          </AnimatePresence>
         </motion.div>
 
         {/* See More Button */}
         {filteredSkills.length > 3 && (
-          <motion.div 
+          <motion.div
             className="see-more-container"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <button 
+            <motion.button
               className="see-more-btn"
               onClick={handleShowMore}
+              whileHover={{ scale: 1.05, y: -3 }}
+              whileTap={{ scale: 0.95 }}
             >
               {showAll ? 'Show Less' : `See More (${filteredSkills.length - 3} more)`}
-            </button>
+            </motion.button>
           </motion.div>
         )}
       </div>
@@ -237,6 +304,18 @@ const Skills = () => {
           width: 100%;
           height: 100%;
           object-fit: cover;
+        }
+
+        .skills-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+          gap: 1.5rem;
+          perspective: 1000px;
+        }
+
+        .skill-card {
+          transform-style: preserve-3d;
+          will-change: transform;
         }
 
         @keyframes spinOrbit {

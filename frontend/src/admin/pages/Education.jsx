@@ -89,6 +89,7 @@ const EducationManagement = () => {
       {error && <div className="error-message">{error}<button className="close-btn" onClick={() => setError(null)}>×</button></div>}
       {success && <div className="success-message">{success}<button className="close-btn" onClick={() => setSuccess(null)}>×</button></div>}
 
+
       <div className="skill-form">
         <h3>{editing ? 'Edit Education' : 'Add Education'}</h3>
         <form onSubmit={handleSubmit}>

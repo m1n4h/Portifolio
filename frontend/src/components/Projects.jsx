@@ -69,26 +69,34 @@ const Projects = () => {
     setSelectedProject(null)
   }
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
+  const cardVariants = {
+    hidden: (i) => ({
+      opacity: 0,
+      y: 80,
+      rotateX: 20,
+      rotateY: i % 2 === 0 ? -10 : 10,
+      scale: 0.8,
+    }),
+    visible: (i) => ({
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  }
-
-  const itemVariants = {
-    hidden: { y: 50, opacity: 0 },
-    visible: {
       y: 0,
-      opacity: 1,
+      rotateX: 0,
+      rotateY: 0,
+      scale: 1,
       transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        type: 'spring',
+        damping: 12,
+        stiffness: 80,
+        delay: i * 0.15,
+      },
+    }),
+    exit: {
+      opacity: 0,
+      scale: 0.7,
+      y: -40,
+      rotateX: -15,
+      transition: { duration: 0.35 },
+    },
   }
 
   const modalVariants = {
@@ -141,93 +149,115 @@ const Projects = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           {categories.map(category => (
-            <button
+            <motion.button
               key={category}
               className={`filter-btn ${activeFilter === category ? 'active' : ''}`}
               onClick={() => handleFilterChange(category)}
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              layout
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
-            </button>
+            </motion.button>
           ))}
         </motion.div>
 
         <motion.div
           className="projects-grid"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
+          layout
         >
-          {displayedProjects.length > 0 ? (
-            displayedProjects.map(project => (
-              <motion.div
-                key={project.id}
-                className="project-card"
-                variants={itemVariants}
-                whileHover={{ y: -10 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                onClick={() => handleCardClick(project)}
-                style={{ cursor: 'pointer' }}
-              >
-                <div className="project-image">
-                  {project.image_url ? (
-                    <img
-                      src={project.image_url}
-                      alt={project.title}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.style.display = 'none';
-                        e.target.parentElement.innerHTML = `
-                          <div class="project-placeholder">
-                            <img src="/images/icons/placeholder-project.svg" alt="Project" onerror="this.onerror=null;this.style.display='none'" />
-                          </div>
-                        `;
-                      }}
-                    />
-                  ) : (
-                    <div className="project-placeholder">
+          <AnimatePresence mode="popLayout">
+            {displayedProjects.length > 0 ? (
+              displayedProjects.map((project, index) => (
+                <motion.div
+                  key={project.id}
+                  className="project-card"
+                  custom={index}
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  layout
+                  whileHover={{
+                    scale: 1.05,
+                    rotateY: index % 2 === 0 ? 5 : -5,
+                    rotateX: -3,
+                    y: -15,
+                    boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
+                    transition: { type: 'spring', stiffness: 250, damping: 18 },
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => handleCardClick(project)}
+                  style={{ cursor: 'pointer', perspective: '1000px', transformStyle: 'preserve-3d' }}
+                >
+                  <div className="project-image">
+                    {project.image_url ? (
                       <img
-                        src="/images/icons/placeholder-project.svg"
-                        alt="Project"
+                        src={project.image_url}
+                        alt={project.title}
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.style.display = 'none';
+                          e.target.parentElement.innerHTML = `
+                            <div class="project-placeholder">
+                              <img src="/images/icons/placeholder-project.svg" alt="Project" onerror="this.onerror=null;this.style.display='none'" />
+                            </div>
+                          `;
                         }}
                       />
-                    </div>
-                  )}
-                </div>
-
-                <div className="project-content">
-                  <h3 className="project-title">{project.title}</h3>
-                  <p className="project-description">{project.description}</p>
-                  <div className="project-technologies">
-                    {project.technologies && project.technologies.split(',').map((tech, index) => (
-                      <span key={index} className="tech-tag">
-                        {tech.trim()}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="project-category">
-                    <span className={`category-badge ${project.category}`}>
-                      {project.category}
-                    </span>
-                    {project.featured && (
-                      <span className="featured-badge">Featured</span>
+                    ) : (
+                      <div className="project-placeholder">
+                        <img
+                          src="/images/icons/placeholder-project.svg"
+                          alt="Project"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.style.display = 'none';
+                          }}
+                        />
+                      </div>
                     )}
                   </div>
-                </div>
+
+                  <div className="project-content">
+                    <h3 className="project-title">{project.title}</h3>
+                    <p className="project-description">{project.description}</p>
+                    <div className="project-technologies">
+                      {project.technologies && project.technologies.split(',').map((tech, index) => (
+                        <motion.span
+                          key={index}
+                          className="tech-tag"
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.5 + index * 0.05 }}
+                          whileHover={{ scale: 1.1, y: -2 }}
+                        >
+                          {tech.trim()}
+                        </motion.span>
+                      ))}
+                    </div>
+                    <div className="project-category">
+                      <span className={`category-badge ${project.category}`}>
+                        {project.category}
+                      </span>
+                      {project.featured && (
+                        <span className="featured-badge">Featured</span>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <motion.div
+                className="no-projects"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <p>No projects found in the {activeFilter} category.</p>
               </motion.div>
-            ))
-          ) : (
-            <motion.div
-              className="no-projects"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <p>No projects found in the {activeFilter} category.</p>
-            </motion.div>
-          )}
+            )}
+          </AnimatePresence>
         </motion.div>
 
         {filteredProjects.length > 3 && (
@@ -237,12 +267,14 @@ const Projects = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <button
+            <motion.button
               className="see-more-btn"
               onClick={handleShowMore}
+              whileHover={{ scale: 1.05, y: -3 }}
+              whileTap={{ scale: 0.95 }}
             >
               {showAll ? 'Show Less' : `See More (${filteredProjects.length - 3} more)`}
-            </button>
+            </motion.button>
           </motion.div>
         )}
       </div>
@@ -287,24 +319,37 @@ const Projects = () => {
               <button
                 onClick={closeModal}
                 style={{
-                  position: 'absolute',
+                  position: 'sticky',
                   top: '16px',
-                  right: '16px',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: 'none',
+                  float: 'right',
+                  marginRight: '16px',
+                  marginTop: '16px',
+                  background: '#e94560',
+                  border: '2px solid #fff',
                   color: '#fff',
-                  fontSize: '24px',
+                  fontSize: '20px',
+                  fontWeight: 'bold',
                   cursor: 'pointer',
-                  width: '40px',
-                  height: '40px',
+                  width: '42px',
+                  height: '42px',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  zIndex: 10
+                  zIndex: 10,
+                  boxShadow: '0 4px 15px rgba(233, 69, 96, 0.5)',
+                  transition: 'all 0.3s ease'
                 }}
-                onMouseEnter={() => setCursorType('hover')}
-                onMouseLeave={() => setCursorType('default')}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'rotate(90deg) scale(1.1)';
+                  e.target.style.background = '#ff6b81';
+                  setCursorType('hover');
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'rotate(0deg) scale(1)';
+                  e.target.style.background = '#e94560';
+                  setCursorType('default');
+                }}
               >
                 ✕
               </button>
@@ -507,6 +552,29 @@ const Projects = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <style>{`
+        .projects-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+          gap: 2rem;
+          perspective: 1200px;
+        }
+        .project-card {
+          transform-style: preserve-3d;
+          will-change: transform;
+        }
+        .project-card .project-image {
+          overflow: hidden;
+          border-radius: 12px 12px 0 0;
+        }
+        .project-card .project-image img {
+          transition: transform 0.5s ease;
+        }
+        .project-card:hover .project-image img {
+          transform: scale(1.08);
+        }
+      `}</style>
     </section>
   )
 }

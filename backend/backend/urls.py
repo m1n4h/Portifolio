@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.http import HttpResponse
 from django.conf import settings
+from django.conf.urls.static import static
 import os
 
 def serve_frontend(request, path=''):
@@ -36,9 +37,31 @@ def serve_frontend(request, path=''):
 
     return HttpResponse('Frontend not built yet', status=404)
 
+
+def serve_media(request, path=''):
+    """Serve uploaded media files from the media directory"""
+    media_root = settings.MEDIA_ROOT
+    file_path = os.path.join(media_root, path)
+    if os.path.isfile(file_path):
+        ext = os.path.splitext(path)[1].lower()
+        content_types = {
+            '.pdf': 'application/pdf',
+            '.png': 'image/png',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.gif': 'image/gif',
+        }
+        content_type = content_types.get(ext, 'application/octet-stream')
+        with open(file_path, 'rb') as f:
+            return HttpResponse(f.read(), content_type=content_type)
+    return HttpResponse('Not found', status=404)
+
 urlpatterns = [
     # Default Django admin
     path('admin/', admin.site.urls),
+
+    # Media files (uploads)
+    re_path(r'^media/(?P<path>.+)$', serve_media, name='serve-media'),
 
     # Portfolio API URLs
     path('', include('portfolio.urls')),
@@ -51,3 +74,7 @@ urlpatterns = [
 admin.site.site_header = 'Amina Kalonge Portfolio Administration'
 admin.site.site_title = 'Portfolio Admin'
 admin.site.index_title = 'Dashboard Overview'
+
+# Serve media files in development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

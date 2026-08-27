@@ -221,3 +221,31 @@ class SystemLog(models.Model):
     
     def __str__(self):
         return f"{self.action} by {self.user} at {self.created_at}"
+
+
+class ProfessionalQualification(models.Model):
+    MODE_CHOICES = [
+        ('online', 'Online'),
+        ('in_person', 'In Person'),
+        ('hybrid', 'Hybrid'),
+    ]
+
+    country = models.CharField(max_length=100)
+    institution = models.CharField(max_length=300)
+    course = models.CharField(max_length=300)
+    mode_of_learning = models.CharField(max_length=20, choices=MODE_CHOICES, default='online')
+    issuer = models.CharField(max_length=200, blank=True)
+    start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
+    certificate = models.FileField(upload_to='certificates/', blank=True, null=True)
+    description = models.TextField(blank=True)
+    order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['order', '-start_date']
+
+    def __str__(self):
+        return f"{self.course} - {self.institution}"

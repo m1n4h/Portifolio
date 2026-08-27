@@ -8,11 +8,12 @@ from django.conf import settings
 from django.db.models import Count, Q
 from django.utils import timezone
 from datetime import timedelta
-from .models import Project, ContactMessage, Skill, UserActivity, EmailLog, SystemLog, Experience, Client, Education
+from .models import Project, ContactMessage, Skill, UserActivity, EmailLog, SystemLog, Experience, Client, Education, ProfessionalQualification
 from .serializers import (
     ProjectSerializer, ContactMessageSerializer, SkillSerializer,
     UserActivitySerializer, EmailLogSerializer, SystemLogSerializer,
-    AdminDashboardSerializer, ExperienceSerializer, ClientSerializer, EducationSerializer
+    AdminDashboardSerializer, ExperienceSerializer, ClientSerializer, EducationSerializer,
+    ProfessionalQualificationSerializer
 )
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -606,3 +607,18 @@ class AuthViewSet(viewsets.ViewSet):
         if x_forwarded_for:
             return x_forwarded_for.split(',')[0]
         return request.META.get('REMOTE_ADDR')
+
+
+class ProfessionalQualificationViewSet(viewsets.ModelViewSet):
+    queryset = ProfessionalQualification.objects.filter(is_active=True)
+    serializer_class = ProfessionalQualificationSerializer
+    permission_classes = [AllowAny]
+    http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
+    def get_queryset(self):
+        return ProfessionalQualification.objects.all().order_by('order', '-start_date')

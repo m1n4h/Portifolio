@@ -11,7 +11,7 @@ const ExperienceManagement = () => {
   const [success, setSuccess] = useState(null);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({
-    title: '', description: '', category: 'mobile', years: 1.0, icon: '', image_url: '', is_active: true
+    title: '', description: '', category: 'mobile', years: 1.0, image_url: '', is_active: true
   });
   const token = localStorage.getItem('access_token');
 
@@ -71,7 +71,7 @@ const ExperienceManagement = () => {
     setEditing(exp);
     setForm({
       title: exp.title, description: exp.description, category: exp.category,
-      years: exp.years, icon: exp.icon, image_url: exp.image_url || '', is_active: exp.is_active
+      years: exp.years, image_url: exp.image_url || '', is_active: exp.is_active
     });
   };
 
@@ -108,10 +108,6 @@ const ExperienceManagement = () => {
               <label>Years</label>
               <input type="number" step="0.5" value={form.years} onChange={e => setForm({...form, years: parseFloat(e.target.value)})} />
             </div>
-            <div className="form-group">
-              <label>Icon (emoji)</label>
-              <input type="text" value={form.icon} onChange={e => setForm({...form, icon: e.target.value})} placeholder="📱" />
-            </div>
             <div className="form-group full-width">
               <label>Description</label>
               <textarea rows="3" value={form.description} onChange={e => setForm({...form, description: e.target.value})} required />
@@ -128,7 +124,7 @@ const ExperienceManagement = () => {
         {experiences.map(exp => (
           <div key={exp.id} className="skill-item">
             <div className="skill-header">
-              <h3>{exp.icon} {exp.title}</h3>
+              <h3>{exp.title}</h3>
               <span className="skill-category">{exp.category}</span>
             </div>
             <p className="skill-description">{exp.description}</p>

@@ -56,6 +56,7 @@ const AdminLayout = () => {
     { to: '/admin/experience', label: 'Experience' },
     { to: '/admin/clients', label: 'Clients' },
     { to: '/admin/education', label: 'Education' },
+    { to: '/admin/qualifications', label: 'Qualifications' },
     { to: '/admin/messages', label: 'Messages'},
     { to: '/admin/analytics', label: 'Analytics'},
     { to: '/admin/activities', label: 'Activities'},
