@@ -47,7 +47,7 @@ const Qualifications = () => {
         formData.append('certificate', certificateFile);
       }
 
-      const config = { headers: { Authorization: `Token ${token}`, 'Content-Type': 'multipart/form-data' } };
+      const config = { headers: { Authorization: `Token ${token}` } };
 
       if (editing) {
         await axios.put(`${API_URL}qualifications/${editing.id}/`, formData, config);
@@ -60,7 +60,10 @@ const Qualifications = () => {
       fetchQualifications();
       setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
-      setError(error.response?.data?.detail || 'Error saving qualification');
+      const msg = error.response?.data?.detail
+        || Object.values(error.response?.data || {}).flat().join(', ')
+        || 'Error saving qualification';
+      setError(msg);
       setTimeout(() => setError(null), 3000);
     }
   };

@@ -610,15 +610,17 @@ class AuthViewSet(viewsets.ViewSet):
 
 
 class ProfessionalQualificationViewSet(viewsets.ModelViewSet):
-    queryset = ProfessionalQualification.objects.filter(is_active=True)
+    queryset = ProfessionalQualification.objects.all()
     serializer_class = ProfessionalQualificationSerializer
-    permission_classes = [AllowAny]
-    http_method_names = ['get', 'post', 'put', 'patch', 'delete']
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
-            return [AllowAny()]
-        return [IsAuthenticated()]
+            self.permission_classes = [AllowAny]
+        else:
+            self.permission_classes = [IsAuthenticated, IsAdminUser]
+        return super().get_permissions()
 
     def get_queryset(self):
-        return ProfessionalQualification.objects.all().order_by('order', '-start_date')
+        if not self.request.user.is_authenticated or not self.request.user.is_staff:
+            return ProfessionalQualification.objects.filter(is_active=True)
+        return ProfessionalQualification.objects.all()
