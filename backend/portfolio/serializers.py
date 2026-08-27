@@ -98,6 +98,9 @@ class ProfessionalQualificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfessionalQualification
         fields = '__all__'
+        extra_kwargs = {
+            'is_active': {'default': True},
+        }
 
     def get_certificate_url(self, obj):
         if obj.certificate:

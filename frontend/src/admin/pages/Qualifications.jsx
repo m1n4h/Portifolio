@@ -43,6 +43,7 @@ const Qualifications = () => {
           formData.append(key, form[key]);
         }
       });
+      formData.append('is_active', 'true');
       if (certificateFile) {
         formData.append('certificate', certificateFile);
       }
@@ -50,7 +51,7 @@ const Qualifications = () => {
       const config = { headers: { Authorization: `Token ${token}` } };
 
       if (editing) {
-        await axios.put(`${API_URL}qualifications/${editing.id}/`, formData, config);
+        await axios.patch(`${API_URL}qualifications/${editing.id}/`, formData, config);
         setSuccess('Qualification updated successfully');
       } else {
         await axios.post(`${API_URL}qualifications/`, formData, config);
