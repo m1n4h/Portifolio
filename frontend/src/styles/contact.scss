@@ -56,13 +56,14 @@
     gap: 1.5rem;
 
     .contact-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      border: 1.5px solid var(--border);
       border-radius: 1rem;
       padding: 1.5rem 2rem;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow);
       
       &::before {
         content: '';
@@ -80,7 +81,7 @@
       &:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 40px var(--shadow-lg);
-        border-color: transparent;
+        border-color: var(--accent);
         
         &::before {
           transform: scaleX(1);
@@ -116,11 +117,12 @@
     }
 
     .social-links {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      border: 1.5px solid var(--border);
       border-radius: 1rem;
       padding: 1.5rem 2rem;
       transition: all 0.4s ease;
+      box-shadow: 0 2px 8px var(--shadow);
 
       h4 {
         font-size: 1rem;
@@ -141,8 +143,8 @@
           justify-content: center;
           width: 48px;
           height: 48px;
-          background: var(--bg-primary);
-          border: 1px solid var(--border);
+          background: var(--bg-secondary);
+          border: 1.5px solid var(--border);
           border-radius: 0.75rem;
           text-decoration: none;
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -169,13 +171,14 @@
 
   /* Contact Form Section */
   .contact-form-container {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
+    background: var(--bg-primary);
+    border: 1.5px solid var(--border);
     border-radius: 1.5rem;
     padding: 2.5rem;
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 2px 8px var(--shadow);
     
     &::before {
       content: '';
@@ -409,24 +412,27 @@
 /* Dark mode specific overrides */
 [data-theme="dark"] .contact {
   .contact-card {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--border);
     background: var(--bg-secondary);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.08);
   }
 
   .social-links {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--border);
     background: var(--bg-secondary);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.08);
   }
 
   .contact-form-container {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--border);
     background: var(--bg-secondary);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.08);
   }
 
   .form-group {
     input, textarea {
       background: var(--bg-primary);
-      border-color: rgba(255, 255, 255, 0.1);
+      border-color: var(--border);
       color: var(--text-primary);
 
       &::placeholder {
@@ -435,7 +441,7 @@
 
       &:focus {
         border-color: var(--accent);
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        box-shadow: 0 0 0 3px rgba(26, 111, 181, 0.25);
       }
     }
   }

@@ -75,12 +75,13 @@
     
     .project-card {
       background: var(--bg-primary);
-      border: 2px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: 1.5rem;
       overflow: hidden;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
       position: relative;
+      box-shadow: 0 2px 8px var(--shadow);
       
       &::after {
         content: '';
@@ -99,7 +100,7 @@
       &:hover {
         box-shadow: 0 25px 60px var(--shadow-lg), 0 0 0 1px var(--border);
         transform: translateY(-10px);
-        border-color: transparent;
+        border-color: var(--accent);
         
         &::after {
           transform: scaleX(1);

@@ -37,11 +37,12 @@
         padding: 2rem 1rem;
         background: var(--bg-primary);
         border-radius: 1rem;
-        border: 1px solid var(--border);
+        border: 1.5px solid var(--border);
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 2px 8px var(--shadow);
         
         &::before {
           content: '';
@@ -59,7 +60,7 @@
         &:hover {
           transform: translateY(-8px);
           box-shadow: 0 15px 40px var(--shadow-lg);
-          border-color: transparent;
+          border-color: var(--accent);
           
           &::before {
             transform: scaleX(1);

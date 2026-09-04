@@ -30,16 +30,16 @@
 }
 
 [data-theme="dark"] {
-  --bg-primary: #0a0f1a;
-  --bg-secondary: #111827;
+  --bg-primary: #0f1729;
+  --bg-secondary: #162032;
   --bg-tertiary: #1e293b;
   --text-primary: #f1f5f9;
   --text-secondary: #cbd5e1;
   --text-tertiary: #94a3b8;
-  --border: #1e293b;
-  --border-light: #0f172a;
-  --shadow: rgba(0, 0, 0, 0.4);
-  --shadow-lg: rgba(0, 0, 0, 0.6);
+  --border: #2a3a52;
+  --border-light: #1a2a40;
+  --shadow: rgba(0, 0, 0, 0.5);
+  --shadow-lg: rgba(0, 0, 0, 0.7);
   --gradient: linear-gradient(135deg, #1a6fb5 0%, #2a9d8f 100%);
   --gradient-secondary: linear-gradient(135deg, #c9a84c 0%, #1a6fb5 100%);
   --gradient-gold: linear-gradient(135deg, #c9a84c 0%, #e0c46e 100%);
@@ -257,13 +257,14 @@ section {
 
 // Cards
 .card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
+  background: var(--bg-primary);
+  border: 1.5px solid var(--border);
   border-radius: 1rem;
   padding: 2rem;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 2px 8px var(--shadow);
   
   &::after {
     content: '';
@@ -281,7 +282,7 @@ section {
   &:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 50px var(--shadow-lg), 0 0 0 1px var(--border);
-    border-color: transparent;
+    border-color: var(--accent);
     
     &::after {
       transform: scaleX(1);
@@ -493,6 +494,41 @@ a:focus-visible {
   font-size: 1.6rem; font-weight: 800;
   background: linear-gradient(135deg, #1a6fb5, #c9a84c);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+/* Dark mode global card fixes */
+[data-theme="dark"] .card,
+[data-theme="dark"] .skill-card,
+[data-theme="dark"] .project-card,
+[data-theme="dark"] .contact-card,
+[data-theme="dark"] .stat,
+[data-theme="dark"] .social-links,
+[data-theme="dark"] .contact-form-container {
+  background: var(--bg-secondary);
+  border: 1.5px solid var(--border);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .card:hover,
+[data-theme="dark"] .skill-card:hover,
+[data-theme="dark"] .project-card:hover,
+[data-theme="dark"] .contact-card:hover,
+[data-theme="dark"] .stat:hover,
+[data-theme="dark"] .contact-form-container:hover {
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 2px rgba(255, 255, 255, 0.1);
+  border-color: var(--accent);
+}
+
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea {
+  background: var(--bg-primary);
+  border: 1.5px solid var(--border);
+  color: var(--text-primary);
+  
+  &:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(26, 111, 181, 0.25);
+  }
 }
 
 // Import component styles
