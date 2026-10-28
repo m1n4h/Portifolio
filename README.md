@@ -125,3 +125,10 @@ https://nidnasser.me/about
 python manage.py runserver
 npm run dev
 docker compose up
+
+
+
+Admin user created successfully!
+Username: admin
+Email: portfoliosalvier@gmail.com
+Default password: Admin@123
