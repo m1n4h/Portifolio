@@ -44,7 +44,7 @@
         border-color: var(--accent);
         color: var(--accent);
         transform: translateY(-2px);
-        background-color: rgba(26, 111, 181, 0.08);
+        background-color: rgba(99, 102, 241, 0.1);
       }
       
       &.active {
@@ -75,7 +75,7 @@
     
     .project-card {
       background: var(--bg-primary);
-      border: 1.5px solid var(--border);
+      border: 2px solid rgb(87, 83, 73);
       border-radius: 1.5rem;
       overflow: hidden;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -98,17 +98,8 @@
       }
       
       &:hover {
-        box-shadow: 0 25px 60px var(--shadow-lg), 0 0 0 1px var(--border);
-        transform: translateY(-10px);
-        border-color: var(--accent);
-        
-        &::after {
-          transform: scaleX(1);
-        }
-        
-        .project-image img {
-          transform: scale(1.08);
-        }
+        box-shadow: 0 20px 40px var(--shadow-lg);
+        transform: translateY(-5px);
         
         .project-overlay {
           opacity: 1;
@@ -125,20 +116,6 @@
         height: 250px;
         overflow: hidden;
         background: var(--bg-secondary);
-        
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 60%;
-          background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 100%);
-          pointer-events: none;
-          opacity: 0;
-          transition: opacity 0.4s ease;
-          z-index: 1;
-        }
         
         img {
           width: 100%;
@@ -221,11 +198,7 @@
           color: var(--text-secondary);
           margin-bottom: 1rem;
           line-height: 1.6;
-          font-size: 0.9rem;
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
+          font-size: 0.95rem;
         }
         
         .project-technologies {

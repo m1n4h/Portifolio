@@ -2,19 +2,18 @@ from rest_framework import viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
-from rest_framework.authtoken.models import Token
 from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models import Count, Q
 from django.utils import timezone
 from datetime import timedelta
-from .models import Project, ContactMessage, Skill, UserActivity, EmailLog, SystemLog, Experience, Client, Education, ProfessionalQualification
+from .models import Project, ContactMessage, Skill, UserActivity, EmailLog, SystemLog
 from .serializers import (
     ProjectSerializer, ContactMessageSerializer, SkillSerializer,
     UserActivitySerializer, EmailLogSerializer, SystemLogSerializer,
-    AdminDashboardSerializer, ExperienceSerializer, ClientSerializer, EducationSerializer,
-    ProfessionalQualificationSerializer
+    AdminDashboardSerializer
 )
+# Add these imports at the top
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.password_validation import validate_password
@@ -26,6 +25,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.shortcuts import get_object_or_404
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
@@ -146,19 +146,14 @@ class SkillViewSet(viewsets.ModelViewSet):
 class ContactMessageViewSet(viewsets.ModelViewSet):
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, IsAdminUser]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'email', 'subject', 'message']
     ordering_fields = ['created_at', 'is_read']
 
-    def get_permissions(self):
-        if self.action == 'create':
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, IsAdminUser]
-        return super().get_permissions()
-
     def create(self, request, *args, **kwargs):
+        # Allow public to send messages
+        self.permission_classes = [AllowAny]
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -209,59 +204,35 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
     def reply(self, request, pk=None):
         message = self.get_object()
         reply_text = request.data.get('reply', '')
-        reply_via = request.data.get('via', 'both')  # 'email', 'sms', 'both'
         
         if not reply_text:
             return Response({'error': 'Reply message required'}, 
                           status=status.HTTP_400_BAD_REQUEST)
         
-        results = {}
-        
-        # Send via Email
-        if reply_via in ('email', 'both'):
-            try:
-                send_mail(
-                    subject=f"Re: {message.subject}",
-                    message=reply_text,
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[message.email],
-                    fail_silently=False,
-                )
-                EmailLog.objects.create(
-                    recipient=message.email,
-                    subject=f"Re: {message.subject}",
-                    message=reply_text,
-                    status='sent'
-                )
-                results['email'] = 'sent'
-            except Exception as e:
-                results['email'] = f'failed: {str(e)}'
-        
-        # Send via SMS (to the phone number used when sending the message)
-        if reply_via in ('sms', 'both') and message.phone:
-            try:
-                from .sms_utils import send_sms
-                sms_text = f"Hi {message.name}, reply from Amina Kalonge Portfolio:\n\n{reply_text}"
-                success, info = send_sms(message.phone, sms_text)
-                results['sms'] = info if success else f'failed: {info}'
-                if success:
-                    EmailLog.objects.create(
-                        recipient=message.phone,
-                        subject=f"SMS Re: {message.subject}",
-                        message=sms_text,
-                        status='sent'
-                    )
-            except Exception as e:
-                results['sms'] = f'failed: {str(e)}'
-        elif reply_via in ('sms', 'both') and not message.phone:
-            results['sms'] = 'skipped: no phone number'
-        
-        message.is_replied = True
-        message.reply = reply_text
-        message.replied_at = timezone.now()
-        message.save()
-        
-        return Response({'status': 'reply sent', 'details': results})
+        try:
+            send_mail(
+                subject=f"Re: {message.subject}",
+                message=reply_text,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[message.email],
+                fail_silently=False,
+            )
+            message.is_replied = True
+            message.reply = reply_text
+            message.replied_at = timezone.now()
+            message.save()
+            
+            EmailLog.objects.create(
+                recipient=message.email,
+                subject=f"Re: {message.subject}",
+                message=reply_text,
+                status='sent'
+            )
+            
+            return Response({'status': 'reply sent successfully'})
+        except Exception as e:
+            return Response({'error': str(e)}, 
+                          status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AdminDashboardViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated, IsAdminUser]
@@ -277,8 +248,8 @@ class AdminDashboardViewSet(viewsets.ViewSet):
             'unread_messages': ContactMessage.objects.filter(is_read=False).count(),
             'total_visits': UserActivity.objects.filter(action='visit').count(),
             'unique_visitors': UserActivity.objects.values('session_id').distinct().count(),
-            'recent_messages': ContactMessageSerializer(ContactMessage.objects.all()[:10], many=True).data,
-            'recent_activities': UserActivitySerializer(UserActivity.objects.all()[:10], many=True).data,
+            'recent_messages': ContactMessage.objects.all()[:10],
+            'recent_activities': UserActivity.objects.all()[:10],
         }
         return Response(data)
     
@@ -394,61 +365,10 @@ class UserActivityViewSet(viewsets.ModelViewSet):
         else:
             return 'other'
 
-
-class ExperienceViewSet(viewsets.ModelViewSet):
-    queryset = Experience.objects.all()
-    serializer_class = ExperienceSerializer
-
-    def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, IsAdminUser]
-        return super().get_permissions()
-
-    def get_queryset(self):
-        if not self.request.user.is_authenticated or not self.request.user.is_staff:
-            return Experience.objects.filter(is_active=True)
-        return Experience.objects.all()
-
-
-class ClientViewSet(viewsets.ModelViewSet):
-    queryset = Client.objects.all()
-    serializer_class = ClientSerializer
-
-    def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, IsAdminUser]
-        return super().get_permissions()
-
-    def get_queryset(self):
-        if not self.request.user.is_authenticated or not self.request.user.is_staff:
-            return Client.objects.filter(is_active=True)
-        return Client.objects.all()
-
-
-class EducationViewSet(viewsets.ModelViewSet):
-    queryset = Education.objects.all()
-    serializer_class = EducationSerializer
-
-    def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, IsAdminUser]
-        return super().get_permissions()
-
-    def get_queryset(self):
-        if not self.request.user.is_authenticated or not self.request.user.is_staff:
-            return Education.objects.filter(is_active=True)
-        return Education.objects.all()
-
-
+        
 class AuthViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
-
+    
     @action(detail=False, methods=['post'])
     def login(self, request):
         username = request.data.get('username')
@@ -465,12 +385,13 @@ class AuthViewSet(viewsets.ViewSet):
                 user_agent=request.META.get('HTTP_USER_AGENT', ''),
                 page='admin login'
             )
-            
-            # Get or create token
-            token, created = Token.objects.get_or_create(user=user)
-            
+
+            # Issue JWT tokens
+            refresh = RefreshToken.for_user(user)
+
             return Response({
-                'token': token.key,
+                'token': str(refresh.access_token),
+                'refresh': str(refresh),
                 'user_id': user.id,
                 'username': user.username,
                 'email': user.email,
@@ -596,8 +517,6 @@ class AuthViewSet(viewsets.ViewSet):
                 ip_address=self.get_client_ip(request),
                 user_agent=request.META.get('HTTP_USER_AGENT', '')
             )
-            # Delete token
-            Token.objects.filter(user=request.user).delete()
         
         logout(request)
         return Response({'message': 'Logged out successfully'})
@@ -607,20 +526,3 @@ class AuthViewSet(viewsets.ViewSet):
         if x_forwarded_for:
             return x_forwarded_for.split(',')[0]
         return request.META.get('REMOTE_ADDR')
-
-
-class ProfessionalQualificationViewSet(viewsets.ModelViewSet):
-    queryset = ProfessionalQualification.objects.all()
-    serializer_class = ProfessionalQualificationSerializer
-
-    def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
-            self.permission_classes = [AllowAny]
-        else:
-            self.permission_classes = [IsAuthenticated, IsAdminUser]
-        return super().get_permissions()
-
-    def get_queryset(self):
-        if not self.request.user.is_authenticated or not self.request.user.is_staff:
-            return ProfessionalQualification.objects.filter(is_active=True)
-        return ProfessionalQualification.objects.all()

@@ -126,34 +126,37 @@ const Contact = () => {
     setSubmitMessage('')
 
     try {
-      const payload = { ...formData }
-      if (payload.phone && !payload.phone.startsWith('+')) {
-        const country = COUNTRIES.find(c => c.code === payload.country_code)
-        if (country) {
-          const digits = payload.phone.replace(/^0+/, '').replace(/\D/g, '')
-          payload.phone = country.dial + digits
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/'
+      
+      const response = await axios.post(`${API_URL}contact/`, formData, {
+        headers: {
+          'Content-Type': 'application/json'
         }
-      }
-      await axios.post(`${API_URL}contact/`, payload, {
-        headers: { 'Content-Type': 'application/json' }
       })
+      
+      console.log('Message sent successfully:', response.data)
+      
       setSubmitStatus('success')
-      setSubmitMessage('Message sent successfully! You will be notified on your phone when I reply.')
-      setFormData({ name: '', email: '', phone: '', country_code: 'TZ', subject: '', message: '' })
-      setErrors({})
-      setTouched({})
+      setSubmitMessage('✅ Message sent successfully! I\'ll get back to you soon.')
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      })
     } catch (error) {
-      if (error.response?.data) {
-        const data = error.response.data
-        if (data.phone) setPhoneError(Array.isArray(data.phone) ? data.phone[0] : data.phone)
+      console.error('Error submitting form:', error)
+      
+      if (error.response) {
         setSubmitStatus('error')
-        setSubmitMessage(data.phone ? 'Please fix the phone number.' : (data.detail || data.error || 'Failed to send message.'))
+        setSubmitMessage(error.response.data.error || '❌ Failed to send message. Please try again.')
       } else if (error.request) {
         setSubmitStatus('error')
-        setSubmitMessage('Unable to connect to server. Please check your connection.')
+        setSubmitMessage('❌ Unable to connect to server. Please check your connection.')
       } else {
         setSubmitStatus('error')
-        setSubmitMessage('An error occurred. Please try again.')
+        setSubmitMessage('❌ An error occurred. Please try again.')
       }
     } finally {
       setIsSubmitting(false)
@@ -161,8 +164,26 @@ const Contact = () => {
   }
 
   const contactInfo = [
-    { icon: '📍', title: 'Location', value: 'Dar es salaam, Tanzania', description: 'Available for remote work worldwide' },
+    {
+      icon: '📧',
+      title: 'Email',
+      value: 'aminakalonge1@gmail.com',
+      description: 'Drop me an email anytime'
+    },
+    {
+      icon: '📱',
+      title: 'Phone',
+      value: '+255 769 526 640',
+      description: 'Available Mon–Fri, 9am–6pm EAT'
+    },
+    {
+      icon: '📍',
+      title: 'Location',
+      value: 'Dar es Salaam, Tanzania',
+      description: 'Available for remote work worldwide'
+    },
   ]
+
   const socialLinks = [
     { name: 'GitHub', url: 'https://github.com/m1n4h', icon: '🐙' },
     { name: 'LinkedIn', url: 'https://linkedin.com/in/aminakalonge', icon: '💼' },
@@ -226,11 +247,9 @@ const Contact = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="Your Name *"
-                    className={getFieldClass('name')}
+                    placeholder="Your Name"
+                    required
                   />
-                  {errors.name && touched.name && <span className="field-error">{errors.name}</span>}
                 </div>
                 <div className="form-group">
                   <input
@@ -238,34 +257,21 @@ const Contact = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="Your Email *"
-                    className={getFieldClass('email')}
+                    placeholder="Your Email"
+                    required
                   />
-                  {errors.email && touched.email && <span className="field-error">{errors.email}</span>}
                 </div>
               </div>
 
               <div className="form-row">
-                <div className="form-group phone-group">
-                  <div className="phone-input-wrap">
-                    <select name="country_code" value={formData.country_code} onChange={handleChange} className="country-select">
-                      {COUNTRIES.map(c => (
-                        <option key={c.code} value={c.code}>{c.flag} {c.dial} {c.name}</option>
-                      ))}
-                    </select>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      placeholder="Phone Number"
-                      className={phoneError ? 'input-error' : ''}
-                    />
-                  </div>
-                  {phoneError && <span className="field-error">{phoneError}</span>}
-                  <span className="field-hint">Select your country, then enter your number. You'll receive my reply via SMS.</span>
+                <div className="form-group">
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="Phone Number (Optional)"
+                  />
                 </div>
                 <div className="form-group">
                   <input
@@ -273,11 +279,9 @@ const Contact = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="Subject *"
-                    className={getFieldClass('subject')}
+                    placeholder="Subject"
+                    required
                   />
-                  {errors.subject && touched.subject && <span className="field-error">{errors.subject}</span>}
                 </div>
               </div>
 
@@ -289,7 +293,7 @@ const Contact = () => {
                   onBlur={handleBlur}
                   placeholder="Your Message *"
                   rows="6"
-                  className={getFieldClass('message')}
+                  required
                 ></textarea>
                 {errors.message && touched.message && <span className="field-error">{errors.message}</span>}
               </div>
@@ -307,12 +311,20 @@ const Contact = () => {
               </div>
 
               {submitStatus === 'success' && (
-                <motion.div className="form-message success" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                <motion.div 
+                  className="form-message success"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
                   {submitMessage}
                 </motion.div>
               )}
               {submitStatus === 'error' && (
-                <motion.div className="form-message error" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                <motion.div 
+                  className="form-message error"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
                   {submitMessage}
                 </motion.div>
               )}

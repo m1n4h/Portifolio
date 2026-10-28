@@ -72,7 +72,6 @@ class Skill(models.Model):
     category = models.CharField(max_length=20, choices=SKILL_CATEGORIES)
     proficiency = models.IntegerField(default=80)  # Percentage
     icon = models.CharField(max_length=100, blank=True)
-    image_url = models.URLField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     order = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
@@ -140,73 +139,6 @@ class EmailLog(models.Model):
     def __str__(self):
         return f"Email to {self.recipient} - {self.status}"
 
-class Experience(models.Model):
-    CATEGORY_CHOICES = [
-        ('mobile', 'Mobile Development'),
-        ('web', 'Web Development'),
-        ('cybersecurity', 'Cybersecurity'),
-        ('networking', 'Networking'),
-    ]
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    category = models.CharField(max_length=30, choices=CATEGORY_CHOICES)
-    years = models.DecimalField(max_digits=3, decimal_places=1, default=1.0)
-    icon = models.CharField(max_length=100, blank=True)
-    image_url = models.URLField(blank=True, null=True)
-    order = models.IntegerField(default=0)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['order']
-
-    def __str__(self):
-        return self.title
-
-
-class Client(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.TextField()
-    image_url = models.URLField(blank=True, null=True)
-    company = models.CharField(max_length=200, blank=True)
-    testimonial = models.TextField(blank=True)
-    rating = models.IntegerField(default=5)
-    order = models.IntegerField(default=0)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['order']
-
-    def __str__(self):
-        return self.name
-
-
-class Education(models.Model):
-    LEVEL_CHOICES = [
-        ('primary', 'Primary'),
-        ('secondary', 'Secondary'),
-        ('advanced', 'Advanced'),
-        ('university', 'University'),
-    ]
-    institution = models.CharField(max_length=300)
-    level = models.CharField(max_length=20, choices=LEVEL_CHOICES)
-    start_year = models.IntegerField()
-    end_year = models.IntegerField(null=True, blank=True)
-    description = models.TextField(blank=True)
-    course = models.CharField(max_length=300, blank=True)
-    is_current = models.BooleanField(default=False)
-    order = models.IntegerField(default=0)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['order', 'start_year']
-
-    def __str__(self):
-        return f"{self.institution} ({self.start_year}-{self.end_year or 'Ongoing'})"
-
-
 class SystemLog(models.Model):
     action = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -221,31 +153,3 @@ class SystemLog(models.Model):
     
     def __str__(self):
         return f"{self.action} by {self.user} at {self.created_at}"
-
-
-class ProfessionalQualification(models.Model):
-    MODE_CHOICES = [
-        ('online', 'Online'),
-        ('in_person', 'In Person'),
-        ('hybrid', 'Hybrid'),
-    ]
-
-    country = models.CharField(max_length=100)
-    institution = models.CharField(max_length=300)
-    course = models.CharField(max_length=300)
-    mode_of_learning = models.CharField(max_length=20, choices=MODE_CHOICES, default='online')
-    issuer = models.CharField(max_length=200, blank=True)
-    start_date = models.DateField()
-    end_date = models.DateField(null=True, blank=True)
-    certificate = models.FileField(upload_to='certificates/', blank=True, null=True)
-    description = models.TextField(blank=True)
-    order = models.IntegerField(default=0)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        ordering = ['order', '-start_date']
-
-    def __str__(self):
-        return f"{self.course} - {self.institution}"
