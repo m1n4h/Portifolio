@@ -13,7 +13,8 @@ import Footer from './components/Footer';
 import SideNav from './components/SideNav';
 import './styles/global.scss';
 
-// Admin imports - MAKE SURE THESE FILES EXIST
+// Admin imports
+import { AdminThemeProvider } from './admin/contexts/AdminThemeContext';
 import AdminLayout from './admin/components/AdminLayout';
 import Login from './admin/pages/Login';
 import Dashboard from './admin/pages/Dashboard';
@@ -22,6 +23,11 @@ import ProjectsManagement from './admin/pages/Projects';
 import MessagesManagement from './admin/pages/Messages';
 import Analytics from './admin/pages/Analytics';
 import Activities from './admin/pages/Activities';
+import Settings from './admin/pages/Settings';
+import ExperienceManagement from './admin/pages/Experience';
+import ClientsManagement from './admin/pages/Clients';
+import EducationManagement from './admin/pages/Education';
+import QualificationsManagement from './admin/pages/Qualifications';
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -67,7 +73,9 @@ function App() {
           path="/admin"
           element={
             <ProtectedRoute>
-              <AdminLayout />
+              <AdminThemeProvider>
+                <AdminLayout />
+              </AdminThemeProvider>
             </ProtectedRoute>
           }
         >
@@ -78,6 +86,11 @@ function App() {
           <Route path="messages" element={<MessagesManagement />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="activities" element={<Activities />} />
+          <Route path="experience" element={<ExperienceManagement />} />
+          <Route path="clients" element={<ClientsManagement />} />
+          <Route path="education" element={<EducationManagement />} />
+          <Route path="qualifications" element={<QualificationsManagement />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
 
         {/* Catch all - redirect to home */}

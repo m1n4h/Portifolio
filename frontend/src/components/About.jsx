@@ -1,12 +1,65 @@
-import React from 'react'
-import { motion, useInView } from 'framer-motion'
+import React, { useState, useEffect } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useRef } from 'react'
+import axios from 'axios'
 import { useCursor } from '../contexts/CursorContext'
+import SectionBackground from './SectionBackground'
+
+const API_URL = '/api/'
 
 const About = () => {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, threshold: 0.3 })
+  const isInView = useInView(ref, { once: true, threshold: 0.2 })
   const { setCursorType, setCursorText } = useCursor()
+
+  const [showExperienceModal, setShowExperienceModal] = useState(false)
+  const [showClientsModal, setShowClientsModal] = useState(false)
+  const [showQualificationsModal, setShowQualificationsModal] = useState(false)
+  const [clients, setClients] = useState([])
+  const [education, setEducation] = useState([])
+  const [experiences, setExperiences] = useState([])
+  const [qualifications, setQualifications] = useState([])
+  const [loadingClients, setLoadingClients] = useState(false)
+  const [loadingEducation, setLoadingEducation] = useState(false)
+  const [loadingExperiences, setLoadingExperiences] = useState(false)
+  const [loadingQualifications, setLoadingQualifications] = useState(false)
+  const [viewingCert, setViewingCert] = useState(null)
+
+  useEffect(() => {
+    if (showClientsModal && clients.length === 0) {
+      setLoadingClients(true)
+      axios.get(`${API_URL}clients/`)
+        .then(res => setClients(res.data))
+        .catch(err => console.error('Failed to fetch clients:', err))
+        .finally(() => setLoadingClients(false))
+    }
+  }, [showClientsModal])
+
+  useEffect(() => {
+    setLoadingEducation(true)
+    axios.get(`${API_URL}education/`)
+      .then(res => setEducation(res.data))
+      .catch(err => console.error('Failed to fetch education:', err))
+      .finally(() => setLoadingEducation(false))
+  }, [])
+
+  useEffect(() => {
+    setLoadingExperiences(true)
+    axios.get(`${API_URL}experience/`)
+      .then(res => setExperiences(res.data))
+      .catch(err => console.error('Failed to fetch experiences:', err))
+      .finally(() => setLoadingExperiences(false))
+  }, [])
+
+  useEffect(() => {
+    if (showQualificationsModal && qualifications.length === 0) {
+      setLoadingQualifications(true)
+      axios.get(`${API_URL}qualifications/`)
+        .then(res => setQualifications(res.data))
+        .catch(err => console.error('Failed to fetch qualifications:', err))
+        .finally(() => setLoadingQualifications(false))
+    }
+  }, [showQualificationsModal])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -62,18 +115,33 @@ const About = () => {
           </motion.div>
 
           <motion.div variants={itemVariants} className="about-stats">
-            <div className="stat">
-              <h3>10+</h3>
-              <p>Projects Completed</p>
-            </div>
-            <div className="stat">
-              <h3>2+</h3>
-              <p>Years Experience</p>
-            </div>
-            <div className="stat">
-              <h3>5+</h3>
-              <p>Happy Clients</p>
-            </div>
+            <motion.button
+              className="btn-primary"
+              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+              onMouseEnter={() => { setCursorType('hover'); setCursorText('View Details →') }}
+              onMouseLeave={() => { setCursorType('default'); setCursorText('') }}
+              onClick={() => setShowExperienceModal(true)}
+            >
+              Years of Experience
+            </motion.button>
+            <motion.button
+              className="btn-primary"
+              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+              onMouseEnter={() => { setCursorType('hover'); setCursorText('View Certs →') }}
+              onMouseLeave={() => { setCursorType('default'); setCursorText('') }}
+              onClick={() => setShowQualificationsModal(true)}
+            >
+              Professional Qualifications
+            </motion.button>
+            <motion.button
+              className="btn-primary"
+              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+              onMouseEnter={() => { setCursorType('hover'); setCursorText('View Clients →') }}
+              onMouseLeave={() => { setCursorType('default'); setCursorText('') }}
+              onClick={() => setShowClientsModal(true)}
+            >
+              Happy Clients
+            </motion.button>
           </motion.div>
         </motion.div>
 

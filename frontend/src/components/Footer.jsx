@@ -22,7 +22,7 @@ const Footer = () => {
     { name: 'Instagram', url: 'https://instagram.com/aminakalonge', icon: '/images/social/instagram.svg' }
   ]
 
-  return (
+  return (  
     <footer className="footer">
       <div className="container">
         <div className="footer-grid">
@@ -34,31 +34,14 @@ const Footer = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h3>Amina Kalonge</h3>
-            <p>
-              Full-Stack &amp; Mobile Developer passionate about building secure,
-              efficient, and user-focused applications.
+            <img src="/images/logo.png" alt="M1N4H" className="footer-logo" onError={(e) => { e.target.style.display = 'none'; e.target.nextElementSibling.style.display = 'block' }} />
+            <span className="footer-logo-fallback" style={{ display: 'none' }}>M1N4H</span>
+            <p style={{ marginTop: '0.8rem', color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
+              Passionate Software Developer crafting secure, beautiful digital experiences.
             </p>
-            <div className="footer-social">
-              {socialLinks.map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-link"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  onMouseEnter={() => { setCursorType('hover'); setCursorText(`${social.name} →`) }}
-                  onMouseLeave={() => { setCursorType('default'); setCursorText('') }}
-                >
-                  <span className="social-icon">{social.icon}</span>
-                </motion.a>
-              ))}
-            </div>
           </motion.div>
 
-          <motion.div
+          <motion.div 
             className="footer-links"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

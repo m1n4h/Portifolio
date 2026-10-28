@@ -16,24 +16,31 @@ const Skills = () => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, threshold: 0.3 })
 
-  useEffect(() => {
-    const fetchSkills = async () => {
-      try {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/'
-        const response = await axios.get(`${API_URL}skills/`)
-        setSkills(response.data)
-        setDisplayedSkills(response.data.slice(0, 3))
-      } catch (error) {
-        console.error('Error fetching skills:', error)
-      }
+  const fetchSkills = useCallback(async () => {
+    try {
+      const response = await axios.get(`${API_URL}skills/`)
+      setSkills(response.data)
+      setDisplayedSkills(prev => {
+        if (prev.length === 0 || JSON.stringify(prev) !== JSON.stringify(response.data.slice(0, 3))) {
+          return response.data.slice(0, 3)
+        }
+        return prev
+      })
+    } catch (error) {
+      console.error('Error fetching skills:', error)
     }
-    fetchSkills()
   }, [])
 
+  useEffect(() => {
+    fetchSkills()
+    const interval = setInterval(fetchSkills, REFRESH_INTERVAL)
+    return () => clearInterval(interval)
+  }, [fetchSkills])
+
   const categories = ['all', 'frontend', 'backend', 'mobile', 'database', 'tools', 'design', 'devops']
-  
-  const filteredSkills = activeCategory === 'all' 
-    ? skills 
+
+  const filteredSkills = activeCategory === 'all'
+    ? skills
     : skills.filter(skill => skill.category === activeCategory)
 
   const handleShowMore = () => {
@@ -50,16 +57,6 @@ const Skills = () => {
     setShowAll(false)
     const filtered = category === 'all' ? skills : skills.filter(skill => skill.category === category)
     setDisplayedSkills(filtered.slice(0, 3))
-  }
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
   }
 
   const cardVariants = {
@@ -123,6 +120,9 @@ const Skills = () => {
               key={category}
               className={`filter-btn ${activeCategory === category ? 'active' : ''}`}
               onClick={() => handleCategoryFilter(category)}
+              whileHover={{ scale: 1.1, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              layout
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
             </motion.button>
@@ -134,63 +134,112 @@ const Skills = () => {
           className="skills-grid"
           layout
         >
-          {displayedSkills.length > 0 ? (
-            displayedSkills.map(skill => (
-              <motion.div
-                key={skill.id}
-                className="skill-card"
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <div className="skill-icon">
-                  {skill.image_url ? (
-                    <img 
-                      src={skill.image_url} 
-                      alt={skill.name} 
-                      className="skill-image"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.style.display = 'none';
-                        e.target.parentElement.innerHTML = `<span>💻</span>`;
-                      }}
+          <AnimatePresence mode="popLayout">
+            {displayedSkills.length > 0 ? (
+              displayedSkills.map((skill, index) => (
+                <motion.div
+                  key={skill.id}
+                  className="skill-card"
+                  custom={index}
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate={isInView ? "visible" : "hidden"}
+                  exit="exit"
+                  layout
+                  whileHover={{
+                    scale: 1.08,
+                    rotateY: 5,
+                    rotateX: -5,
+                    y: -12,
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+                    transition: { type: 'spring', stiffness: 300, damping: 20 },
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{ perspective: '1000px', transformStyle: 'preserve-3d' }}
+                >
+                  <div className="skill-icon-wrapper">
+                    <div className="skill-orbit-ring" />
+                    <motion.div
+                      className="skill-icon"
+                      animate={{ rotate: [0, 5, -5, 0] }}
+                      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                    >
+                      {skill.image_url ? (
+                        <img
+                          src={skill.image_url}
+                          alt={skill.name}
+                          className="skill-image"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.style.display = 'none';
+                            const fallback = document.createElement('span');
+                            fallback.textContent = skill.icon || '💻';
+                            e.target.parentElement.appendChild(fallback);
+                          }}
+                        />
+                      ) : (
+                        <span>{skill.icon || '💻'}</span>
+                      )}
+                    </motion.div>
+                  </div>
+                  <motion.h3
+                    className="skill-name"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    {skill.name}
+                  </motion.h3>
+                  <div className="skill-progress">
+                    <motion.div
+                      className="skill-progress-bar"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${skill.proficiency}%` }}
+                      transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
                     />
-                  ) : (
-                    <span>{skill.icon || '💻'}</span>
+                  </div>
+                  <motion.span
+                    className="skill-percentage"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.7, type: 'spring' }}
+                  >
+                    {skill.proficiency}%
+                  </motion.span>
+                  {skill.description && (
+                    <p className="skill-description">{skill.description}</p>
                   )}
-                </div>
-                <h3 className="skill-name">{skill.name}</h3>
-                <div className="skill-progress">
-                  <div 
-                    className="skill-progress-bar"
-                    style={{ width: `${skill.proficiency}%` }}
-                  ></div>
-                </div>
-                <span className="skill-percentage">{skill.proficiency}%</span>
-                {skill.description && (
-                  <p className="skill-description">{skill.description}</p>
-                )}
-              </motion.div>
-            ))
-          ) : (
-            <p className="no-skills">No skills found in this category.</p>
-          )}
+                </motion.div>
+              ))
+            ) : (
+              <motion.p
+                className="no-skills"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                No skills found in this category.
+              </motion.p>
+            )}
+          </AnimatePresence>
         </motion.div>
 
         {/* See More Button */}
         {filteredSkills.length > 3 && (
-          <motion.div 
+          <motion.div
             className="see-more-container"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <button 
+            <motion.button
               className="see-more-btn"
               onClick={handleShowMore}
+              whileHover={{ scale: 1.05, y: -3 }}
+              whileTap={{ scale: 0.95 }}
             >
               {showAll ? 'Show Less' : `See More (${filteredSkills.length - 3} more)`}
-            </button>
+            </motion.button>
           </motion.div>
         )}
       </div>

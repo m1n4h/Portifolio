@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, ContactMessage, Skill, UserActivity, EmailLog, SystemLog
+from .models import Project, ContactMessage, Skill, UserActivity, EmailLog, SystemLog, Experience, Client, Education, ProfessionalQualification
 
 class ProjectSerializer(serializers.ModelSerializer):
     technologies_list = serializers.SerializerMethodField()
@@ -20,6 +20,28 @@ class ContactMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactMessage
         fields = '__all__'
+
+    def validate_phone(self, value):
+        if not value:
+            return value
+        country = self.initial_data.get('country_code', 'TZ')
+        from .sms_utils import format_phone_e164
+        formatted, is_valid, error = format_phone_e164(value, country)
+        if not is_valid:
+            raise serializers.ValidationError(f"Invalid phone number for {country}: {error}")
+        return formatted
+
+    def validate(self, attrs):
+        # Store the formatted phone
+        phone = attrs.get('phone', '')
+        if phone:
+            country = attrs.get('country_code', self.initial_data.get('country_code', 'TZ'))
+            from .sms_utils import format_phone_e164
+            formatted, is_valid, error = format_phone_e164(phone, country)
+            if not is_valid:
+                raise serializers.ValidationError({"phone": f"Invalid phone number: {error}"})
+            attrs['phone'] = formatted
+        return attrs
 
 class UserActivitySerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,3 +72,51 @@ class AdminDashboardSerializer(serializers.Serializer):
     unique_visitors = serializers.IntegerField()
     recent_messages = ContactMessageSerializer(many=True)
     recent_activities = UserActivitySerializer(many=True)
+
+
+class ExperienceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Experience
+        fields = '__all__'
+
+
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = '__all__'
+
+
+class EducationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Education
+        fields = '__all__'
+
+
+class ProfessionalQualificationSerializer(serializers.ModelSerializer):
+    certificate_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ProfessionalQualification
+        fields = '__all__'
+        extra_kwargs = {
+            'is_active': {'default': True},
+        }
+
+    def get_certificate_url(self, obj):
+        if obj.certificate:
+            return obj.certificate.url
+        return None
+
+    def validate_certificate(self, certificate):
+        if certificate:
+            filename = certificate.name.split('/')[-1]
+            existing = ProfessionalQualification.objects.filter(
+                certificate__icontains=filename
+            )
+            if self.instance:
+                existing = existing.exclude(pk=self.instance.pk)
+            if existing.exists():
+                raise serializers.ValidationError(
+                    f'A certificate with the name "{filename}" already exists. Please rename the file or use a different one.'
+                )
+        return certificate

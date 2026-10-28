@@ -2,7 +2,6 @@
 
 import os
 from pathlib import Path
-from datetime import timedelta
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -13,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-x8l(j6$_i@+5vndr5=11xgr#com@8c567&v8$fl#en5_v#ocej')
 
 
-DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
+DEBUG = os.environ.get('DEBUG', 'false').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0').split(',')
 
@@ -81,8 +80,8 @@ if os.environ.get('DB_ENGINE') == 'postgres':
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.environ.get('POSTGRES_DB', 'portfolio_db'),
-            'USER': os.environ.get('POSTGRES_USER', 'portfolio_user'),  # Changed from 'postgres'
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'portfoliomanagemnt145'),  # Changed from 'amygirly'
+            'USER': os.environ.get('POSTGRES_USER', 'portfolio_user'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'portfoliomanagemnt145'),
             'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
             'PORT': os.environ.get('POSTGRES_PORT', '5432'),
         }
@@ -156,13 +155,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS Settings - Only allow frontend origin
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "http://127.0.0.1:5173", 
-    "http://0.0.0.0:5173",
-    "http://10.42.0.84:5173",
-    "http://192.168.1.132",
+    "http://127.0.0.1:5173",
 ]
 
-CORS_ALLOW_ALL_ORIGINS = DEBUG  # Only allow all in development
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 
 # REST Framework Settings
@@ -171,25 +167,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
-}
-
-# JWT Settings
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'ROTATE_REFRESH_TOKENS': True,
-    'AUTH_HEADER_TYPES': ('Bearer',),
-}
-
-# JWT Settings
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'ROTATE_REFRESH_TOKENS': True,
-    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 # Email Configuration
